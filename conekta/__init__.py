@@ -23,7 +23,6 @@ HEADERS = {
     'Content-type': 'application/json'
 }
 
-
 class Conekta(object):
 
     '''Conekta v2 API wrapper'''
@@ -49,15 +48,16 @@ class Conekta(object):
         def build_request(self, method, path, params):
             absolute_url = self.expand_path(path)
             request = getattr(self.request, method.lower())
-            print absolute_url, params, HEADERS
             return request(absolute_url, params=params, headers=HEADERS)
 
         def load_url(self, path, method='get', params={}):
             params['auth_token'] = PUBLIC_KEY
             response = self.build_request(method, path, params)
-            if response.status_code is not 200 or response.status_code is not 201:
-                print response.status_code
-                print response.text
+            if response.status_code is not 200 and response.status_code is not 201:
+                return {
+                    'status_code': response.status_code,
+                    'status_text': response.text
+                }
             return response.json()
 
     class Products(_Endpoint):
