@@ -13,8 +13,7 @@ client = Conekta()
 
 products = client.products()
 
-for product in products:
-    print product
+print products
 
 ```
 
