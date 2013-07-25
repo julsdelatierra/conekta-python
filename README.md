@@ -1,6 +1,16 @@
 pyconekta
 =========
 
+Install
+
+```sh
+pip install conekta
+```
+
+```sh
+easy_install conekta
+```
+
 Wrapper for conekta.mx
 
 
