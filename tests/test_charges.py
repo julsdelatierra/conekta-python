@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# coding: utf-8
+#coding: utf-8
 #(c) 2013 Julian Ceballos <@jceb>
 
 from . import BaseEndpointTestCase

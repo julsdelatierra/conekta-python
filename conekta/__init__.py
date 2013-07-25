@@ -2,7 +2,6 @@
 #coding: utf-8
 #(c) 2013 Julian Ceballos <@jceb>
 
-import requests
 import inspect
 from httplib2 import Http
 
@@ -14,7 +13,7 @@ except ImportError:
 API_VERSION = '0.1'
 
 __version__ = API_VERSION
-__author__ = u'Julián Ceballos'
+__author__ = 'Julian Ceballos'
 
 API_BASE = 'https://paymentsapi-dev.herokuapp.com/'
 

@@ -9,7 +9,7 @@ version = str(conekta.__version__)
 author = str(conekta.__author__)
 
 setup(
-    name='pyconekta',
+    name='conekta',
     version=version,
     author=author,
     author_email='julian@pikhub.com',
@@ -18,7 +18,7 @@ setup(
     long_description=open('./README.txt', 'r').read(),
     download_url='http://github.com/julianceballos/conekta/tarball/master',
     classifiers=[
-        'Development Status :: 1 - Production/Stable',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Operating System :: OS Independent',

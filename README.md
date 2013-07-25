@@ -32,14 +32,14 @@ data = {
     }
 }
 
-oxxo_charge = client.charges(data)
+oxxo_charge = client.charges.create(data)
 
-print oxxo_charge
+print oxxo_charge.to_json()
 
 ```
 
 ## Endpoints
 
 ```
-charges()
+charges.create()
 ```
