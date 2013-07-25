@@ -13,10 +13,10 @@ setup(
     version=version,
     author=author,
     author_email='julian@pikhub.com',
-    url='http://github.com/julianceballos/conekta',
+    url='https://github.com/julianceballos/conekta',
     description='Easy Conekta python wrapper',
     long_description=open('./README.txt', 'r').read(),
-    download_url='http://github.com/julianceballos/conekta/tarball/master',
+    download_url='https://github.com/julianceballos/conekta/tarball/master',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
