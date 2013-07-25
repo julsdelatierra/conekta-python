@@ -29,7 +29,6 @@ setup(
     packages=find_packages(),
     install_requires=[
         'httplib2',
-        'inspect',
         'simplejson'
     ],
     license='MIT License',
