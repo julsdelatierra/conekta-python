@@ -94,6 +94,6 @@ class Conekta(object):
 
         endpoint = 'charges'
 
-        def add(self, params={}):
+        def create(self, params={}):
             endpoint = self.endpoint + '.json'
             return self.load_url(endpoint, method='post', params=params)

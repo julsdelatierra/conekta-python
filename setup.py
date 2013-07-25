@@ -6,18 +6,19 @@ from setuptools import setup, find_packages
 
 import conekta
 version = str(conekta.__version__)
+author = str(conekta.__author__)
 
 setup(
-    name='conekta',
+    name='pyconekta',
     version=version,
-    author='Julian Ceballos',
-    author_email='julian@lastroom.mx',
+    author=author,
+    author_email='julian@pikhub.com',
     url='http://github.com/julianceballos/conekta',
     description='Easy Conekta python wrapper',
     long_description=open('./README.txt', 'r').read(),
     download_url='http://github.com/julianceballos/conekta/tarball/master',
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 1 - Production/Stable',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Operating System :: OS Independent',
@@ -27,7 +28,7 @@ setup(
         ],
     packages=find_packages(),
     install_requires=[
-        'requests',
+        'httplib2',
         'inspect',
         'simplejson'
     ],
