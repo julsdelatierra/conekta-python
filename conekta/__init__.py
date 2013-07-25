@@ -4,6 +4,8 @@
 
 import requests
 import inspect
+from httplib2 import Http
+
 try:
     import json
 except ImportError:
@@ -14,100 +16,84 @@ API_VERSION = '0.1'
 __version__ = API_VERSION
 __author__ = u'Julián Ceballos'
 
-API_BASE = 'http://conekta.mx/api/v1/'
-
-PUBLIC_KEY = 'rFSorOipD0j61sKLsNq'
+API_BASE = 'https://paymentsapi-dev.herokuapp.com/'
 
 HEADERS = {
     'Accept': 'application/vnd.example.v1',
     'Content-type': 'application/json'
 }
 
+def to_json(obj):
+    data = {}
+    items = ()
+    if isinstance(obj, CkObject):
+        items = obj.__dict__.iteritems()
+    else:
+        try:
+            items = json.loads(obj).iteritems()
+        except:
+            items = obj.iteritems()
+    for key, value in items:
+        try:
+            data[key] = to_json(value)
+        except AttributeError:
+            data[key] = value
+    return data
+
+class CkObject(object):
+    def __init__(self, d):
+        self.__dict__['d'] = d
+
+    def __getattr__(self, key):
+        value = self.__dict__['d'][key]
+        if type(value) == type({}):
+            return CkObject(value)
+        return value
+
+    def to_json(self):
+        data = to_json(self)
+        return data['d']
+
 class Conekta(object):
 
     '''Conekta v2 API wrapper'''
 
-    def __init__(self, public_key=None, private_key=None):
-        self._attach_endpoints()
+    def __init__(self, public_key, private_key):
+        self._attach_endpoints(public_key, private_key)
 
-    def _attach_endpoints(self):
+    def _attach_endpoints(self, public_key, private_key):
         """Dynamically attach endpoint callables to this client"""
         for name, endpoint in inspect.getmembers(self):
             if inspect.isclass(endpoint) and issubclass(endpoint, self._Endpoint) and (endpoint is not self._Endpoint):
-                endpoint_instance = endpoint()
+                endpoint_instance = endpoint(public_key, private_key)
                 setattr(self, endpoint_instance.endpoint, endpoint_instance)
 
     class _Endpoint(object):
 
-        def __init__(self):
-            self.request = requests
+        def __init__(self, public_key, private_key):
+            self.public_key = public_key
+            self.private_key = private_key
 
         def expand_path(self, path):
             return API_BASE + path
 
         def build_request(self, method, path, params):
+            HEADERS['Authorization'] = 'Token token="%s"' % (self.public_key)
             absolute_url = self.expand_path(path)
-            request = getattr(self.request, method.lower())
-            return request(absolute_url, params=params, headers=HEADERS)
+            request = Http({}).request
+            headers, body = request(absolute_url, method, headers=HEADERS, body=json.dumps(params))
+            if headers['status'] == '200' or headers['status'] == '201':
+                return CkObject(body)
+            return CkObject({'error': body})
 
         def load_url(self, path, method='get', params={}):
-            params['auth_token'] = PUBLIC_KEY
             response = self.build_request(method, path, params)
-            if response.status_code is not 200 and response.status_code is not 201:
-                return {
-                    'status_code': response.status_code,
-                    'status_text': response.text
-                }
-            return response.json()
+            return response
 
-    class Products(_Endpoint):
+    class Charges(_Endpoint):
 
-        endpoint = 'products'
-
-        def __call__(self, product_id=None):
-            endpoint = self.endpoint
-            if product_id is not None:
-                endpoint = self.endpoint + '/' + product_id
-            return self.load_url(endpoint)
+        endpoint = 'charges'
 
         def add(self, params={}):
-            return self.load_url(self.endpoint, method='post', params=params)
-
-    class Orders(_Endpoint):
-
-        endpoint = 'orders'
-
-        def __call__(self, order_id=None):
-            endpoint = self.endpoint
-            if order_id is not None:
-                endpoint = self.endpoint + '/' + order_id
-            return self.load_url(endpoint)
-
-        def add(self, params={}):
-            return self.load_url(self.endpoint, method='post', params=params)
-
-        def pay(self, params):
-            endpoint = 'https://eps.banorte.com/secure3d/Solucion3DSecure.htm'
-            arguments = params['payment']['redirect_form_attributes']
-            return self.load_url(endpoint, arguments)
-
-    class Suscriptions(_Endpoint):
-
-        endpoint = 'suscriptions'
-
-        def __call__(self, suscription_id=None):
-            endpoint = self.endpoint
-            if suscription_id is not None:
-                endpoint = self.endpoint + '/' + suscription_id
-            return self.load_url(endpoint)
-
-        def add(self, params={}):
-            return self.load_url(self.endpoint, method='post', params=params)
-
-    class Companies(_Endpoint):
-
-        endpoint = 'companies'
-
-        def add(self, company_id, params):
-            endpoint = self.endpoint + '/' + company_id
+            endpoint = self.endpoint + '.json'
             return self.load_url(endpoint, method='post', params=params)
