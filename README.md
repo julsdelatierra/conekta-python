@@ -19,7 +19,7 @@ For example:
 ```python
 from conekta import Conekta
 
-client = Conekta()
+client = Conekta(public_key='asdasd', private_key='asdasd')
 
 data = {
     "amount": 10000,
