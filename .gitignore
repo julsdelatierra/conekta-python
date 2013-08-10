@@ -2,3 +2,6 @@ syntax: glob;
 
 *.pyc
 test.py
+.DS_Store
+tests/.DS_Store
+conekta/.DS_Store
