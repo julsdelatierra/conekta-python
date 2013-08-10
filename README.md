@@ -1,5 +1,7 @@
-pyconekta
+Conekta
 =========
+
+Wrapper for api.conekta.io
 
 Install
 
@@ -10,8 +12,6 @@ pip install conekta
 ```sh
 easy_install conekta
 ```
-
-Wrapper for api.conekta.io
 
 
 Charge via bank:
