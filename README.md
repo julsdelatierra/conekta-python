@@ -36,7 +36,13 @@ customer = conekta.Customer(
 
 bank = conekta.Banks(type="banorte")
 
-charge = conekta.Charge.create(amount=10000, currency="MXN", description="DVD - Zorro", customer=custome, bank=bank)
+charge = conekta.Charge.create(
+    amount=10000,
+    currency="MXN",
+    description="DVD - Zorro",
+    customer=custome,
+    bank=bank
+)
 
 print charge.to_json()
 
@@ -72,7 +78,13 @@ card = conekta.Cards(
   failure_url="https://www.epic-fail.com"
 )
 
-charge = conekta.Charge.create(amount=10000, currency="MXN", description="DVD - Zorro", customer=custome, card=card)
+charge = conekta.Charge.create(
+    amount=10000,
+    currency="MXN",
+    description="DVD - Zorro",
+    customer=custome,
+    card=card
+)
 
 print charge.to_json()
 ```
@@ -99,7 +111,13 @@ customer = conekta.Customer(
 
 bank = conekta.objects.Cash(type="oxxo")
 
-charge = conekta.Charge.create(amount=10000, currency="MXN", description="DVD - Zorro", customer=custome, bank=bank)
+charge = conekta.Charge.create(
+    amount=10000,
+    currency="MXN",
+    description="DVD - Zorro",
+    customer=custome,
+    bank=bank
+)
 
 print charge.to_json()
 ```
@@ -107,5 +125,15 @@ print charge.to_json()
 ## Endpoints
 
 ```
-charges.create()
+conekta.Charge.create()
+```
+
+## Clases
+
+```
+conekta.Charges
+conekta.Cash
+conekta.Banks
+conekta.Cards
+conekta.Customers
 ```
