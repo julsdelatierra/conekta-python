@@ -11,7 +11,7 @@ pip install conekta
 easy_install conekta
 ```
 
-Wrapper for conekta.mx
+Wrapper for api.conekta.io
 
 
 Charge via bank:
