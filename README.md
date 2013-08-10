@@ -44,7 +44,7 @@ charge = conekta.Charge.create(
     bank=bank
 )
 
-print charge.to_json()
+print charge.parseJSON()
 
 ```
 
@@ -86,7 +86,7 @@ charge = conekta.Charge.create(
     card=card
 )
 
-print charge.to_json()
+print charge.parseJSON()
 ```
 
 Charge via oxxo
@@ -119,7 +119,7 @@ charge = conekta.Charge.create(
     bank=bank
 )
 
-print charge.to_json()
+print charge.parseJSON()
 ```
 
 ## Endpoints
