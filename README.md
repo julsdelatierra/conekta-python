@@ -11,7 +11,7 @@ pip install conekta
 easy_install conekta
 ```
 
-Wrapper for conekta.mx
+Wrapper for api.conekta.io
 
 
 For example:
@@ -28,14 +28,7 @@ data = {
     "customer": {
         "name": "Gilberto Gil",
         "email": "gil.gil@mypayments.mx",
-        "phone": 5567942342,
-        "street1": "Jiminez 11",
-        "street2": "Despacho 99",
-        "street3": "La Condesa",
-        "city": "Cuauhtemoc",
-        "state": "DF",
-        "country": "MX",
-        "zip": "06100"
+        "phone": 5567942342
     },
     "bank": {
         "type": "banorte"
