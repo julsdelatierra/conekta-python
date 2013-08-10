@@ -40,7 +40,7 @@ charge = conekta.Charge.create(
     amount=10000,
     currency="MXN",
     description="DVD - Zorro",
-    customer=custome,
+    customer=customer,
     bank=bank
 )
 
@@ -82,7 +82,7 @@ charge = conekta.Charge.create(
     amount=10000,
     currency="MXN",
     description="DVD - Zorro",
-    customer=custome,
+    customer=customer,
     card=card
 )
 
@@ -115,7 +115,7 @@ charge = conekta.Charge.create(
     amount=10000,
     currency="MXN",
     description="DVD - Zorro",
-    customer=custome,
+    customer=customer,
     bank=bank
 )
 
