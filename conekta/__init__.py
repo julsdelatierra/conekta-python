@@ -22,10 +22,12 @@ HEADERS = {
     'Content-type': 'application/json'
 }
 
-def to_json(obj):
+api_key = ''
+
+def parseJSON(obj):
     data = {}
     items = ()
-    if isinstance(obj, CkObject):
+    if isinstance(obj, _CkObject):
         items = obj.__dict__.iteritems()
     else:
         try:
@@ -34,65 +36,84 @@ def to_json(obj):
             items = obj.iteritems()
     for key, value in items:
         try:
-            data[key] = to_json(value)
+            data[key] = parseJSON(value)
         except AttributeError:
             data[key] = value
     return data
 
-class CkObject(object):
+class _CkObject(object):
     def __init__(self, d):
         self.__dict__['d'] = d
 
     def __getattr__(self, key):
         value = self.__dict__['d'][key]
         if type(value) == type({}):
-            return CkObject(value)
+            return _CkObject(value)
         return value
 
-    def to_json(self):
-        data = to_json(self)
+    def parseJSON(self):
+        data = parseJSON(self)
         return data['d']
 
-class Conekta(object):
+class _Instance(object):
 
-    '''Conekta v2 API wrapper'''
+    def __init__(self, *args, **kwargs):
+        for i in kwargs:
+            setattr(self, i, kwargs[i])
 
-    def __init__(self, public_key, private_key):
-        self._attach_endpoints(public_key, private_key)
+    def parseJSON(self):
+        return self.__dict__
 
-    def _attach_endpoints(self, public_key, private_key):
-        """Dynamically attach endpoint callables to this client"""
-        for name, endpoint in inspect.getmembers(self):
-            if inspect.isclass(endpoint) and issubclass(endpoint, self._Endpoint) and (endpoint is not self._Endpoint):
-                endpoint_instance = endpoint(public_key, private_key)
-                setattr(self, endpoint_instance.endpoint, endpoint_instance)
+class _Endpoint(object):
 
-    class _Endpoint(object):
+    def expand_path(self, path):
+        return API_BASE + path
 
-        def __init__(self, public_key, private_key):
-            self.public_key = public_key
-            self.private_key = private_key
+    def build_request(self, method, path, params):
+        HEADERS['Authorization'] = 'Token token="%s"' % (api_key)
+        absolute_url = self.expand_path(path)
+        request = Http({}).request
+        headers, body = request(absolute_url, method, headers=HEADERS, body=json.dumps(params))
+        if headers['status'] == '200' or headers['status'] == '201':
+            return _CkObject(json.loads(body))
+        return _CkObject({'error': json.loads(body)})
 
-        def expand_path(self, path):
-            return API_BASE + path
+    def load_url(self, path, method='get', params={}):
+        response = self.build_request(method, path, params)
+        return response
 
-        def build_request(self, method, path, params):
-            HEADERS['Authorization'] = 'Token token="%s"' % (self.public_key)
-            absolute_url = self.expand_path(path)
-            request = Http({}).request
-            headers, body = request(absolute_url, method, headers=HEADERS, body=json.dumps(params))
-            if headers['status'] == '200' or headers['status'] == '201':
-                return CkObject(body)
-            return CkObject({'error': body})
+class Customers(_Instance, _Endpoint):
 
-        def load_url(self, path, method='get', params={}):
-            response = self.build_request(method, path, params)
-            return response
+    pass
 
-    class Charges(_Endpoint):
+class Cards(_Instance, _Endpoint):
 
-        endpoint = 'charges'
+    pass
 
-        def create(self, params={}):
-            endpoint = self.endpoint + '.json'
-            return self.load_url(endpoint, method='post', params=params)
+class Banks(_Instance, _Endpoint):
+
+    pass
+
+class Cashs(_Instance, _Endpoint):
+
+    pass
+
+class Charges(_Instance, _Endpoint):
+
+    def create(self, customer=None, card=None, amount=None, currency=None, description=None, cash=None, bank=None):
+        endpoint = 'charges.json'
+        params = {
+            'customer': customer.parseJSON(),
+            'amount': amount,
+            'currency': currency,
+            'description': description
+        }
+        if card is not None:
+            params['card'] = card.parseJSON()
+        if cash is not None:
+            params['cash'] = cash.parseJSON()
+        if bank is not None:
+            params['bank'] = bank.parseJSON()
+        return self.load_url(endpoint, method='post', params=params)
+
+Charge = Charges()

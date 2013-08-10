@@ -14,38 +14,94 @@ easy_install conekta
 Wrapper for conekta.mx
 
 
-For example:
+Charge via bank:
 
 ```python
-from conekta import Conekta
+import conekta
 
-client = Conekta(public_key='asdasd', private_key='asdasd')
+conekta.api_key = 'blablabla'
 
-data = {
-    "amount": 10000,
-    "currency": "MXN",
-    "description": "DVD - Zorro",
-    "customer": {
-        "name": "Gilberto Gil",
-        "email": "gil.gil@mypayments.mx",
-        "phone": 5567942342,
-        "street1": "Jiminez 11",
-        "street2": "Despacho 99",
-        "street3": "La Condesa",
-        "city": "Cuauhtemoc",
-        "state": "DF",
-        "country": "MX",
-        "zip": "06100"
-    },
-    "bank": {
-        "type": "banorte"
-    }
-}
+customer = conekta.Customer(
+    name="Gilberto Gil",
+    email="gil.gil@mypayments.mx",
+    phone=5567942342,
+    street1="Jiminez 11",
+    street2="Despacho 99",
+    street3="La Condesa",
+    city="Cuauhtemoc",
+    state="DF",
+    country="MX",
+    zip="06100"
+)
 
-oxxo_charge = client.charges.create(data)
+bank = conekta.Banks(type="banorte")
 
-print oxxo_charge.to_json()
+charge = conekta.Charge.create(amount=10000, currency="MXN", description="DVD - Zorro", customer=custome, bank=bank)
 
+print charge.to_json()
+
+```
+
+Charge via card
+
+```python
+import conekta
+
+conekta.api_key = 'blablabla'
+
+customer = conekta.Customer(
+    name="Gilberto Gil",
+    email="gil.gil@mypayments.mx",
+    phone=5567942342,
+    street1="Jiminez 11",
+    street2="Despacho 99",
+    street3="La Condesa",
+    city="Cuauhtemoc",
+    state="DF",
+    country="MX",
+    zip="06100"
+)
+
+card = conekta.Cards(
+  name="Gilberto Gil",
+  cvc="000",
+  number="4111111111111111",
+  exp_month="04",
+  exp_year="16",
+  success_url="https://www.ftw.com",
+  failure_url="https://www.epic-fail.com"
+)
+
+charge = conekta.Charge.create(amount=10000, currency="MXN", description="DVD - Zorro", customer=custome, card=card)
+
+print charge.to_json()
+```
+
+Charge via oxxo
+
+```python
+import conekta
+
+conekta.api_key = 'blablabla'
+
+customer = conekta.Customer(
+    name="Gilberto Gil",
+    email="gil.gil@mypayments.mx",
+    phone=5567942342,
+    street1="Jiminez 11",
+    street2="Despacho 99",
+    street3="La Condesa",
+    city="Cuauhtemoc",
+    state="DF",
+    country="MX",
+    zip="06100"
+)
+
+bank = conekta.objects.Cash(type="oxxo")
+
+charge = conekta.Charge.create(amount=10000, currency="MXN", description="DVD - Zorro", customer=custome, bank=bank)
+
+print charge.to_json()
 ```
 
 ## Endpoints

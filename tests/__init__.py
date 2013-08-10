@@ -7,13 +7,13 @@ import unittest
 from conekta import Conekta
 
 # credentials
-PUBLIC_KEY = 'XHj7GsiJaWBy3Zgkj93z'
-PRIVATE_KEY = ''
+api_key = 'XHj7GsiJaWBy3Zgkj93z'
 
 
 class BaseEndpointTestCase(unittest.TestCase):
 
-    api = Conekta(PUBLIC_KEY, PRIVATE_KEY)
+    client = Conekta()
+    client.api_key = api_key
 
     card_charge_object = {
         "amount": 10000,
