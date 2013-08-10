@@ -21,7 +21,7 @@ import conekta
 
 conekta.api_key = 'blablabla'
 
-customer = conekta.Customer(
+customer = conekta.Customers(
     name="Gilberto Gil",
     email="gil.gil@mypayments.mx",
     phone=5567942342,
@@ -55,7 +55,7 @@ import conekta
 
 conekta.api_key = 'blablabla'
 
-customer = conekta.Customer(
+customer = conekta.Customers(
     name="Gilberto Gil",
     email="gil.gil@mypayments.mx",
     phone=5567942342,
@@ -96,7 +96,7 @@ import conekta
 
 conekta.api_key = 'blablabla'
 
-customer = conekta.Customer(
+customer = conekta.Customers(
     name="Gilberto Gil",
     email="gil.gil@mypayments.mx",
     phone=5567942342,
@@ -109,7 +109,7 @@ customer = conekta.Customer(
     zip="06100"
 )
 
-bank = conekta.objects.Cash(type="oxxo")
+bank = conekta.Cash(type="oxxo")
 
 charge = conekta.Charge.create(
     amount=10000,
