@@ -10,12 +10,12 @@ try:
 except ImportError:
     import simplejson as json
 
-API_VERSION = '0.2'
+API_VERSION = '0.3'
 
 __version__ = API_VERSION
 __author__ = 'Julian Ceballos'
 
-API_BASE = 'https://paymentsapi-dev.herokuapp.com/'
+API_BASE = 'https://api.conekta.io/'
 
 HEADERS = {
     'Accept': 'application/vnd.example.v1',

@@ -118,10 +118,24 @@ var data = {
 charge = conekta.Charge.create(data)
 
 print charge.parseJSON()
+
+#Also you can get the attributes from the conekta response class:
+print charge.id
+
+#Or if you get an error:
+print charge.error.type
 ```
 
 ## Endpoints
 
 ```
 conekta.Charge.create()
+```
+
+## Tests
+
+You can test the conekta library with nose on the conekta library root:
+
+```sh
+$ nosetests
 ```
