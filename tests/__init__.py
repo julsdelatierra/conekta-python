@@ -4,7 +4,7 @@
 
 import unittest
 
-from conekta import Conekta
+import conekta
 
 # credentials
 api_key = 'XHj7GsiJaWBy3Zgkj93z'
@@ -12,7 +12,7 @@ api_key = 'XHj7GsiJaWBy3Zgkj93z'
 
 class BaseEndpointTestCase(unittest.TestCase):
 
-    client = Conekta()
+    client = conekta
     client.api_key = api_key
 
     card_charge_object = {

@@ -5,3 +5,6 @@ test.py
 .DS_Store
 tests/.DS_Store
 conekta/.DS_Store
+build
+conekta.egg-info
+dist

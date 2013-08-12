@@ -55,15 +55,6 @@ class _CkObject(object):
         data = parseJSON(self)
         return data['d']
 
-class _Instance(object):
-
-    def __init__(self, *args, **kwargs):
-        for i in kwargs:
-            setattr(self, i, kwargs[i])
-
-    def parseJSON(self):
-        return self.__dict__
-
 class _Endpoint(object):
 
     def expand_path(self, path):
@@ -82,38 +73,10 @@ class _Endpoint(object):
         response = self.build_request(method, path, params)
         return response
 
-class Customers(_Instance, _Endpoint):
+class _Charges(_Endpoint):
 
-    pass
-
-class Cards(_Instance, _Endpoint):
-
-    pass
-
-class Banks(_Instance, _Endpoint):
-
-    pass
-
-class Cashs(_Instance, _Endpoint):
-
-    pass
-
-class Charges(_Instance, _Endpoint):
-
-    def create(self, customer=None, card=None, amount=None, currency=None, description=None, cash=None, bank=None):
+    def create(self, params):
         endpoint = 'charges.json'
-        params = {
-            'customer': customer.parseJSON(),
-            'amount': amount,
-            'currency': currency,
-            'description': description
-        }
-        if card is not None:
-            params['card'] = card.parseJSON()
-        if cash is not None:
-            params['cash'] = cash.parseJSON()
-        if bank is not None:
-            params['bank'] = bank.parseJSON()
         return self.load_url(endpoint, method='post', params=params)
 
-Charge = Charges()
+Charge = _Charges()
