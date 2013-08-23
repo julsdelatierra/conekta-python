@@ -79,4 +79,12 @@ class _Charges(_Endpoint):
         endpoint = 'charges.json'
         return self.load_url(endpoint, method='post', params=params)
 
+class _Event(_Endpoint):
+
+    def retrieve(self, id):
+        endpoint = 'events/' + id + '.json'
+        return self.load_url(endpoint)
+
+
 Charge = _Charges()
+Event = _Event()

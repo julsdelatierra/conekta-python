@@ -126,6 +126,24 @@ print charge.id
 print charge.error.type
 ```
 
+#Retrieve event info
+
+```python
+import conekta
+
+conekta.api_key = 'blablabla'
+
+event = conekta.Event.retrieve('521701ee19cbbea233000091')
+
+print event.parseJSON()
+
+#Also you can get the attributes from the conekta response class:
+print event.id
+
+#Or if you get an error:
+print event.error.type
+```
+
 ## Endpoints
 
 ```
