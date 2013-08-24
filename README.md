@@ -148,6 +148,7 @@ print event.error.type
 
 ```
 conekta.Charge.create()
+conekta.Event.retrieve()
 ```
 
 ## Tests
