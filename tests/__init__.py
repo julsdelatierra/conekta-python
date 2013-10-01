@@ -6,78 +6,58 @@ import unittest
 
 import conekta
 
-# credentials
-api_key = 'XHj7GsiJaWBy3Zgkj93z'
-
 
 class BaseEndpointTestCase(unittest.TestCase):
 
     client = conekta
-    client.api_key = api_key
 
     card_charge_object = {
-        "amount": 10000,
+        "description": "Grad Stogies: Second Class",
+        "amount": 20000,
         "currency": "MXN",
-        "description": "DVD - Zorro",
-        "customer": {
-            "name": "Gilberto Gil",
-            "email": "gil.gil@mypayments.mx",
-            "phone": 5567942342,
-            "street1": "Jiminez 11",
-            "street2": "Despacho 99",
-            "street3": "La Condesa",
-            "city": "Cuauhtemoc",
-            "state": "DF",
-            "country": "MX",
-            "zip": "06100"
-        },
+        "reference_id": "9893-cohib_s1_wolf_pack",
         "card": {
-            "name": "Gilberto Gil",
-            "cvc": "000",
-            "number": "4111111111111111",
-            "exp_month": "04",
-            "exp_year": "16",
-            "success_url": "https://www.ftw.com",
-            "failure_url": "https://www.epic-fail.com"
+            "number": 4111111111111111,
+            "exp_month": 12,
+            "exp_year": 2015,
+            "name": "Thomas Logan",
+            "cvc": 666,
+            "address": {
+                "street1": "250 Alexis St",
+                "city": "Red Deer",
+                "state": "Alberta",
+                "country": "Canada",
+                "zip": "T4N 0B8"
+            }
         }
     }
+    
     cash_charge_object = {
-        "amount": 10000,
         "currency": "MXN",
-        "description": "DVD - Zorro",
-        "customer": {
-            "name": "Gilberto Gil",
-            "email": "gil.gil@mypayments.mx",
-            "phone": 5567942342,
-            "street1": "Jiminez 11",
-            "street2": "Despacho 99",
-            "street3": "La Condesa",
-            "city": "Cuauhtemoc",
-            "state": "DF",
-            "country": "MX",
-            "zip": "06100"
-        },
+        "amount": 20000,
+        "description": "Grad Stogies: Second Class",
+        "reference_id": "9893-cohib_s1_wolf_pack",
         "cash": {
             "type": "oxxo"
+        },
+        "details": {
+            "name": "Wolverine",
+            "email": "logan.thomas@xmen.org",
+            "phone": "403-342-0642"
         }
     }
+    
     bank_charge_object = {
-        "amount": 10000,
         "currency": "MXN",
-        "description": "DVD - Zorro",
-        "customer": {
-            "name": "Gilberto Gil",
-            "email": "gil.gil@mypayments.mx",
-            "phone": 5567942342,
-            "street1": "Jiminez 11",
-            "street2": "Despacho 99",
-            "street3": "La Condesa",
-            "city": "Cuauhtemoc",
-            "state": "DF",
-            "country": "MX",
-            "zip": "06100"
-        },
+        "amount": 20000,
+        "description": "Grad Stogies: Second Class",
+        "reference_id": "9893-cohib_s1_wolf_pack",
         "bank": {
             "type": "banorte"
+        },
+        "details": {
+            "name": "Wolverine",
+            "email": "logan.thomas@xmen.org",
+            "phone": "403-342-0642"
         }
     }

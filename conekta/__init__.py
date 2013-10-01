@@ -10,7 +10,7 @@ try:
 except ImportError:
     import simplejson as json
 
-API_VERSION = '0.5'
+API_VERSION = '0.6'
 
 __version__ = API_VERSION
 __author__ = 'Julian Ceballos'
@@ -81,8 +81,8 @@ class _Charges(_Endpoint):
 
 class _Event(_Endpoint):
 
-    def retrieve(self, id):
-        endpoint = 'events/' + id + '.json'
+    def all(self):
+        endpoint = 'events.json'
         return self.load_url(endpoint)
 
 
