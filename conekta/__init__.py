@@ -5,7 +5,6 @@
 import base64
 import inspect
 import urllib
-import logging
 from httplib2 import Http
 
 try:
@@ -18,7 +17,7 @@ API_VERSION = '0.2.0'
 __version__ = '0.6'
 __author__ = 'Julian Ceballos'
 
-API_BASE = 'http://localhost:3000/'
+API_BASE = 'https://api.conekta.io/'
 
 HEADERS = {
     'Accept': 'application/vnd.conekta-v%s+json' % (API_VERSION),

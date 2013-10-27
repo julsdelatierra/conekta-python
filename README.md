@@ -43,13 +43,15 @@ var data = {
 
 charge = conekta.Charge.create(data)
 
-print charge.parseJSON()
-
 #Also you can get the attributes from the conekta response class:
 print charge.id
 
 #Or if you get an error:
-print charge.error.type
+try:
+    #your code
+catch ConektaError:
+    print 'Exception in code'
+
 ```
 
 Charge via oxxo
@@ -76,13 +78,14 @@ var data = {
 
 charge = conekta.Charge.create(data)
 
-print charge.parseJSON()
-
 #Also you can get the attributes from the conekta response class:
 print charge.id
 
 #Or if you get an error:
-print charge.error.type
+try:
+    #your code
+catch ConektaError:
+    print 'Exception in code'
 ```
 
 Charge via bank:
@@ -109,13 +112,14 @@ var data = {
 
 charge = conekta.Charge.create(data)
 
-print charge.parseJSON()
-
 #Also you can get the attributes from the conekta response class:
 print charge.id
 
 #Or if you get an error:
-print charge.error.type
+try:
+    #your code
+catch ConektaError:
+    print 'Exception in code'
 
 ```
 
@@ -129,14 +133,19 @@ conekta.api_key = '1tv5yJp3xnVZ7eK67m4h'
 
 events = conekta.Event.all()
 
-print events.parseJSON()
 ```
 
 ## Endpoints
 
 ```
 conekta.Charge.create()
+conekta.Charge.all()
+conekta.Charge.retrieve('charge_id')
+charge.refund(amount)
 conekta.Event.all()
+conekta.Event.retrieve('event_id')
+conekta.Log.all()
+conekta.Log.retrieve('log_id')
 ```
 
 ## Tests
