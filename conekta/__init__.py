@@ -17,7 +17,7 @@ API_VERSION = '0.2.0'
 __version__ = '0.6'
 __author__ = 'Julian Ceballos'
 
-API_BASE = 'https://api.conekta.io/'
+API_BASE = 'http://localhost:3000/'
 
 HEADERS = {
     'Accept': 'application/vnd.conekta-v%s+json' % (API_VERSION),
@@ -47,10 +47,20 @@ class _Resource(object):
         absolute_url = API_BASE + path
         request = Http({}).request
         if method == 'GET':
-            url = "%s?%s" % (absolute_url, urllib.urlencode(params))
+            if params is None:
+                url = absolute_url
+            else:
+                url = "%s?%s" % (absolute_url, urllib.urlencode(params, True))
             headers, body = request(url, method, headers=HEADERS)
         else:
-            headers, body = request(absolute_url, method, headers=HEADERS, body=json.dumps(params))
+            if params is None:
+                HEADERS['Content-type'] = 'application/x-www-form-urlencoded'
+                HEADERS['Content-length'] = '0'
+                headers, body = request(absolute_url, method, headers=HEADERS, body='')
+                del HEADERS['Content-length']
+                HEADERS['Content-type'] = 'application/json'
+            else:
+                headers, body = request(absolute_url, method, headers=HEADERS, body=json.dumps(params))
 
         if headers['status'] == '200' or headers['status'] == '201':
             response_body = json.loads(body)
@@ -58,7 +68,7 @@ class _Resource(object):
         raise ConektaError(json.loads(body))
 
     @classmethod
-    def load_url(cls, path, method='GET', params={}):
+    def load_url(cls, path, method='GET', params=None):
         response = cls.build_request(method, path, params)
         return response
 
@@ -88,7 +98,7 @@ class _Resource(object):
             self.__dict__[key] = attributes[key]
 
 
-    def refresh(self, url=None, method='POST', params={}):
+    def refresh(self, url=None, method='POST', params=None):
         if url is None:
             url = self.instance_url()
             method = 'GET'
