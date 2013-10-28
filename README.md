@@ -43,14 +43,10 @@ var data = {
 
 charge = conekta.Charge.create(data)
 
-#Also you can get the attributes from the conekta response class:
+#You can also get the attributes from the conekta response class:
 print charge.id
 
-#Or if you get an error:
-try:
-    #your code
-catch ConektaError:
-    print 'Exception in code'
+#Or in the event of an error, you can expect a ConektaError to be raised
 
 ```
 
@@ -81,11 +77,7 @@ charge = conekta.Charge.create(data)
 #Also you can get the attributes from the conekta response class:
 print charge.id
 
-#Or if you get an error:
-try:
-    #your code
-catch ConektaError:
-    print 'Exception in code'
+#Or in the event of an error, you can expect a ConektaError to be raised
 ```
 
 Charge via bank:
@@ -115,11 +107,7 @@ charge = conekta.Charge.create(data)
 #Also you can get the attributes from the conekta response class:
 print charge.id
 
-#Or if you get an error:
-try:
-    #your code
-catch ConektaError:
-    print 'Exception in code'
+#Or in the event of an error, you can expect a ConektaError to be raised
 
 ```
 
