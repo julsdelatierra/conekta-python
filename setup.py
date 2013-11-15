@@ -4,9 +4,8 @@
 
 from setuptools import setup, find_packages
 
-import conekta
-version = str(conekta.__version__)
-author = str(conekta.__author__)
+version = "0.9"
+author = "Julian Ceballos"
 
 setup(
     name='conekta',
