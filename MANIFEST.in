@@ -1,3 +1,4 @@
 include LICENSE MANIFEST.in
 include *.txt
 include *.md
+include conekta/ssl_data/ca_bundle.crt
