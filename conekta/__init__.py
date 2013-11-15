@@ -2,6 +2,7 @@
 #coding: utf-8
 #(c) 2013 Julian Ceballos <@jceb>
 
+import os
 import base64
 import inspect
 import urllib
@@ -42,10 +43,14 @@ class _Resource(object):
         self.__dict__[key] = value
 
     @classmethod
-    def build_request(cls, method, path, params):
-        HEADERS['Authorization'] = 'Basic %s' % (base64.b64encode(api_key + ':'))
+    def build_request(cls, method, path, params, _api_key=None):
+        if _api_key is None:
+            HEADERS['Authorization'] = 'Basic %s' % (base64.b64encode(api_key + ':'))
+        else:
+            HEADERS['Authorization'] = 'Basic %s' % (base64.b64encode(_api_key + ':'))
+        
         absolute_url = API_BASE + path
-        request = Http({}).request
+        request = Http(ca_certs=os.path.join(os.path.dirname(__file__), 'ssl_data/ca_bundle.crt')).request
         if method == 'GET':
             if params is None:
                 url = absolute_url
@@ -68,8 +73,8 @@ class _Resource(object):
         raise ConektaError(json.loads(body))
 
     @classmethod
-    def load_url(cls, path, method='GET', params=None):
-        response = cls.build_request(method, path, params)
+    def load_url(cls, path, method='GET', params=None, api_key=None):
+        response = cls.build_request(method, path, params, _api_key = api_key)
         return response
 
     @classmethod
@@ -98,12 +103,12 @@ class _Resource(object):
             self.__dict__[key] = attributes[key]
 
 
-    def refresh(self, url=None, method='POST', params=None):
+    def refresh(self, url=None, method='POST', params=None, api_key=None):
         if url is None:
             url = self.instance_url()
             method = 'GET'
 
-        response = self.load_url(url, method=method, params=params)
+        response = self.load_url(url, method=method, params=params, api_key=api_key)
 
         self.construct_from(response)
 
@@ -111,31 +116,31 @@ class _Resource(object):
 
 class _CreateableResource(_Resource):
     @classmethod
-    def create(cls, params):
+    def create(cls, params, api_key=None):
         endpoint = cls.class_url()
-        return cls(cls.load_url(endpoint, method='POST', params=params))
+        return cls(cls.load_url(endpoint, method='POST', params=params, api_key=api_key))
 
 class _ListableResource(_Resource):
     @classmethod
-    def retrieve(cls, _id):
+    def retrieve(cls, _id, api_key=None):
         endpoint = cls.class_url()
-        return cls(cls.load_url("%s/%s" % (endpoint, _id) ))
+        return cls(cls.load_url("%s/%s" % (endpoint, _id), api_key=api_key ))
 
     @classmethod
-    def all(cls, query={}, limit=10, offset=0, sort=[]):
+    def all(cls, query={}, limit=10, offset=0, sort=[], api_key=None):
         endpoint = cls.class_url()
         query['limit'] = limit
         query['offset'] = offset
         query['sort'] = sort
-        return [cls(attributes) for attributes in cls.load_url(endpoint, 'GET', query)]
+        return [cls(attributes) for attributes in cls.load_url(endpoint, 'GET', query, api_key=api_key)]
 
 
 class Charge(_CreateableResource, _ListableResource):
-    def refund(self, amount=None):
+    def refund(self, amount=None, api_key=None):
         if amount is None:
-            return self.refresh("%s/refund" % self.instance_url())
+            return self.refresh("%s/refund" % self.instance_url(), api_key=api_key)
         else:
-            return self.refresh("%s/refund" % self.instance_url(), 'POST', {'amount':amount})
+            return self.refresh("%s/refund" % self.instance_url(), 'POST', {'amount':amount}, api_key=api_key)
 
 class Log(_ListableResource): pass
 
