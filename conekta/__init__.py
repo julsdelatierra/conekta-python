@@ -13,7 +13,7 @@ try:
 except ImportError:
     import simplejson as json
 
-API_VERSION = '0.2.0'
+API_VERSION = '0.3.0'
 
 __version__ = '0.9'
 __author__ = 'Julian Ceballos'
@@ -95,7 +95,7 @@ class _Resource(object):
         existing_keys = self.__dict__.keys()
         new_keys = attributes.keys()
 
-        old_keys = set(existing_keys) - set(new_keys)
+        old_keys = (set(existing_keys) - set(['parent'])) - set(new_keys)
         for key in old_keys:
             self.__dict__[key] = None
 
@@ -114,7 +114,15 @@ class _Resource(object):
 
         return self
 
-class _CreateableResource(_Resource):
+class _DeletableResource(_Resource):
+    def delete(self, params={}, api_key=None):
+        return self.refresh(self.instance_url(), 'DELETE', {}, api_key=api_key)
+
+class _UpdatableResource(_Resource):
+    def update(self, params={}, api_key=None):
+        return self.refresh(self.instance_url(), 'PUT', params, api_key=api_key)
+
+class _CreatableResource(_Resource):
     @classmethod
     def create(cls, params, api_key=None):
         endpoint = cls.class_url()
@@ -134,16 +142,77 @@ class _ListableResource(_Resource):
         query['sort'] = sort
         return [cls(attributes) for attributes in cls.load_url(endpoint, 'GET', query, api_key=api_key)]
 
+class Card(_UpdatableResource, _DeletableResource): 
+    def instance_url(self):
+        return "customers/%s/cards/%s" % (self.parent.id, self.id)
 
-class Charge(_CreateableResource, _ListableResource):
+class Subscription(_UpdatableResource):
+    def instance_url(self):
+        return "customers/%s/subscription" % (self.parent.id)
+
+    def pause(self, finish_billing_cycle=False, until=None, api_key=None):
+        return self.refresh("%s/pause" % self.instance_url(), 'POST', {'until': until}, api_key=api_key)
+
+    def resume(self, api_key=None):
+        return self.refresh("%s/resume" % self.instance_url(), 'POST', None, api_key=api_key)
+
+    def cancel(self, finish_billing_cycle=False, api_key=None):
+        return self.refresh("%s/cancel" % self.instance_url(), 'POST', None, api_key=api_key)
+
+    @property
+    def card(self):
+        return [card for card in self.parent.cards if card.id == self.card_id][0]
+
+    @property
+    def plan(self):
+        return Plan.retrieve(self.plan_id)
+
+class Charge(_CreatableResource, _ListableResource):
     def refund(self, amount=None, api_key=None):
         if amount is None:
             return self.refresh("%s/refund" % self.instance_url(), api_key=api_key)
         else:
             return self.refresh("%s/refund" % self.instance_url(), 'POST', {'amount':amount}, api_key=api_key)
 
+class Plan(_CreatableResource, _UpdatableResource, _DeletableResource, _ListableResource): pass
+
+class Customer(_CreatableResource, _UpdatableResource, _DeletableResource, _ListableResource):
+    def __init__(self, *args, **kwargs):
+        super(Customer, self).__init__(*args, **kwargs)
+
+        attributes = args[0]
+        self.cards = []
+        if attributes['cards']:
+            for card in attributes['cards']:
+                card['parent'] = self
+                self.cards.append(Card(card))
+
+        if attributes['subscription']:
+            attributes['subscription']['parent'] = self
+            self.subscription = Subscription(attributes['subscription'])
+        else:
+            self.subscription = None
+
+    def createCard(self, params, api_key=None):
+        card = Card(Card.load_url("%s/cards" % self.instance_url(), 'POST', params, api_key=api_key))
+        card.parent = self
+        self.cards.append(card)
+        return card
+
+    def createSubscription(self, params, api_key=None):
+        subscription = Subscription(Subscription.load_url("%s/subscription" % self.instance_url(), 'POST', params, api_key=api_key))
+        subscription.parent = self
+        self.subscription = subscription
+        return subscription
+
+    @property
+    def default_card(self):
+        if self.default_card_id:
+            return [card for card in self.cards if card.id == self.default_card_id][0]
+        else:
+            return None
+
 class Log(_ListableResource): pass
 
 class Event(_ListableResource): pass
-
 

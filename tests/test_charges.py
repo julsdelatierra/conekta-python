@@ -54,3 +54,41 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         retrieved_event = self.client.Event.retrieve(events[0].id)
         assert retrieved_event.id
 
+    def test_plan_create(self):
+        plan = self.client.Plan.create(self.plan_object)
+        assert plan.id == self.plan_object['id']
+
+    def test_customer_create(self):
+        customer = self.client.Customer.create(self.customer_object)
+        assert customer.id == self.customer_object['id']
+
+    def test_cards(self):
+        customer = self.client.Customer.all()[0]
+        card = customer.createCard({'token_id':'tok_test_visa_4242'})
+        assert card.last4 == '4242'
+        card.update({'active':False})
+        assert card.active == False
+        card.update({'token_id':'tok_test_mastercard_5100'})
+        assert card.last4 == '5100'
+        card.delete()
+        assert card.deleted
+
+    def test_subscription(self):
+        customer = self.client.Customer.all()[0]
+        subscription = customer.createSubscription({'plan_id':self.client.plan_object['id']})
+        assert subscription.id
+        subscription.pause()
+        assert subscription.status == 'paused'
+        subscription.resume()
+        assert subscription.status == 'active'
+        subscription.cancel()
+        assert subscription.status == 'canceled'
+
+    def test_customer_delete(self):
+        customer.delete()
+        assert customer.deleted
+
+    def test_plan_delete(self):
+        plan.delete()
+        assert plan.deleted
+
