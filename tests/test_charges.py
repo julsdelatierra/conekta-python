@@ -60,14 +60,14 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
 
     def test_customer_create(self):
         customer = self.client.Customer.create(self.customer_object)
-        assert customer.id == self.customer_object['id']
+        assert customer.name == self.customer_object['name']
 
     def test_cards(self):
         customer = self.client.Customer.all()[0]
         card = customer.createCard({'token_id':'tok_test_visa_4242'})
         assert card.last4 == '4242'
-        card.update({'active':False})
-        assert card.active == False
+        #card.update({'active':False})
+        #assert card.active == False
         card.update({'token_id':'tok_test_mastercard_5100'})
         assert card.last4 == '5100'
         card.delete()
@@ -75,7 +75,9 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
 
     def test_subscription(self):
         customer = self.client.Customer.all()[0]
-        subscription = customer.createSubscription({'plan_id':self.client.plan_object['id']})
+        subscription = customer.subscription
+        if customer.subscription is None:
+            subscription = customer.createSubscription({'plan_id':self.plan_object['id']})
         assert subscription.id
         subscription.pause()
         assert subscription.status == 'paused'
@@ -85,10 +87,12 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         assert subscription.status == 'canceled'
 
     def test_customer_delete(self):
+        customer = self.client.Customer.all()[0]
         customer.delete()
         assert customer.deleted
 
     def test_plan_delete(self):
+        plan = self.client.Plan.retrieve(self.plan_object['id'])
         plan.delete()
         assert plan.deleted
 

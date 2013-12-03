@@ -18,7 +18,7 @@ API_VERSION = '0.3.0'
 __version__ = '0.9'
 __author__ = 'Julian Ceballos'
 
-API_BASE = 'https://api.conekta.io/'
+API_BASE = 'http://127.0.0.1:9292/'
 
 HEADERS = {
     'Accept': 'application/vnd.conekta-v%s+json' % (API_VERSION),
@@ -89,7 +89,7 @@ class _Resource(object):
         return "%s/%s" % (self.class_url(), self.id)
 
     def construct_from(self, attributes):
-        if attributes['id']:
+        if 'id' in attributes.keys():
             self.id = attributes['id']
 
         existing_keys = self.__dict__.keys()
@@ -182,12 +182,12 @@ class Customer(_CreatableResource, _UpdatableResource, _DeletableResource, _List
 
         attributes = args[0]
         self.cards = []
-        if attributes['cards']:
+        if 'cards' in attributes.keys():
             for card in attributes['cards']:
                 card['parent'] = self
                 self.cards.append(Card(card))
 
-        if attributes['subscription']:
+        if 'subscription' in attributes.keys() and isinstance(attributes['subscription'], dict):
             attributes['subscription']['parent'] = self
             self.subscription = Subscription(attributes['subscription'])
         else:

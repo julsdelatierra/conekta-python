@@ -17,20 +17,7 @@ class BaseEndpointTestCase(unittest.TestCase):
         "amount": 20000,
         "currency": "MXN",
         "reference_id": "9893-cohib_s1_wolf_pack",
-        "card": {
-            "number": 4111111111111111,
-            "exp_month": 12,
-            "exp_year": 2015,
-            "name": "Thomas Logan",
-            "cvc": 666,
-            "address": {
-                "street1": "250 Alexis St",
-                "city": "Red Deer",
-                "state": "Alberta",
-                "country": "Canada",
-                "zip": "T4N 0B8"
-            }
-        }
+        "card": "tok_test_visa_4242"
     }
     
     cash_charge_object = {
@@ -64,7 +51,7 @@ class BaseEndpointTestCase(unittest.TestCase):
     }
 
     plan_object = {
-        'id':'py-test-subscription_' + str(random.randint(1, 1000000)),
+        'id':'py-test-plan_' + str(random.randint(1, 1000000)),
         'name': 'Python Test Subscription',
         'amount': 10000,
         'currency': 'MXN',
