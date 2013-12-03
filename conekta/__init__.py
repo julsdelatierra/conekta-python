@@ -18,7 +18,7 @@ API_VERSION = '0.3.0'
 __version__ = '0.9'
 __author__ = 'Julian Ceballos'
 
-API_BASE = 'http://127.0.0.1:9292/'
+API_BASE = 'https://api.conekta.io/'
 
 HEADERS = {
     'Accept': 'application/vnd.conekta-v%s+json' % (API_VERSION),

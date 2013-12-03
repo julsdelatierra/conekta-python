@@ -66,8 +66,8 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         customer = self.client.Customer.all()[0]
         card = customer.createCard({'token_id':'tok_test_visa_4242'})
         assert card.last4 == '4242'
-        #card.update({'active':False})
-        #assert card.active == False
+        card.update({'active':False})
+        assert card.active == False
         card.update({'token_id':'tok_test_mastercard_5100'})
         assert card.last4 == '5100'
         card.delete()
