@@ -4,7 +4,7 @@
 
 from setuptools import setup, find_packages
 
-version = "0.9"
+version = "1.0.0"
 author = "Julian Ceballos"
 
 setup(
