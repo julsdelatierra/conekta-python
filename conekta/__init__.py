@@ -15,7 +15,7 @@ except ImportError:
 
 API_VERSION = '0.3.0'
 
-__version__ = '0.9'
+__version__ = '1.0.0'
 __author__ = 'Julian Ceballos'
 
 API_BASE = 'https://api.conekta.io/'
@@ -34,7 +34,7 @@ class ConektaError(Exception):
 
 class _Resource(object):
     def __init__(self, attributes):
-        self.construct_from(attributes)
+        self.initialize_instance(attributes)
 
     def __getitem__(self, key):
         return self.__dict__[key]
@@ -43,12 +43,12 @@ class _Resource(object):
         self.__dict__[key] = value
 
     @classmethod
-    def build_request(cls, method, path, params, _api_key=None):
+    def build_http_request(cls, method, path, params, _api_key=None):
         if _api_key is None:
             HEADERS['Authorization'] = 'Basic %s' % (base64.b64encode(api_key + ':'))
         else:
             HEADERS['Authorization'] = 'Basic %s' % (base64.b64encode(_api_key + ':'))
-        
+
         absolute_url = API_BASE + path
         request = Http(ca_certs=os.path.join(os.path.dirname(__file__), 'ssl_data/ca_bundle.crt')).request
         if method == 'GET':
@@ -74,7 +74,7 @@ class _Resource(object):
 
     @classmethod
     def load_url(cls, path, method='GET', params=None, api_key=None):
-        response = cls.build_request(method, path, params, _api_key = api_key)
+        response = cls.build_http_request(method, path, params, _api_key = api_key)
         return response
 
     @classmethod
@@ -88,7 +88,7 @@ class _Resource(object):
     def instance_url(self):
         return "%s/%s" % (self.class_url(), self.id)
 
-    def construct_from(self, attributes):
+    def initialize_instance(self, attributes):
         if 'id' in attributes.keys():
             self.id = attributes['id']
 
@@ -103,24 +103,24 @@ class _Resource(object):
             self.__dict__[key] = attributes[key]
 
 
-    def refresh(self, url=None, method='POST', params=None, api_key=None):
+    def load_via_http_request(self, url=None, method='POST', params=None, api_key=None):
         if url is None:
             url = self.instance_url()
             method = 'GET'
 
         response = self.load_url(url, method=method, params=params, api_key=api_key)
 
-        self.construct_from(response)
+        self.initialize_instance(response)
 
         return self
 
 class _DeletableResource(_Resource):
     def delete(self, params={}, api_key=None):
-        return self.refresh(self.instance_url(), 'DELETE', {}, api_key=api_key)
+        return self.load_via_http_request(self.instance_url(), 'DELETE', {}, api_key=api_key)
 
 class _UpdatableResource(_Resource):
     def update(self, params={}, api_key=None):
-        return self.refresh(self.instance_url(), 'PUT', params, api_key=api_key)
+        return self.load_via_http_request(self.instance_url(), 'PUT', params, api_key=api_key)
 
 class _CreatableResource(_Resource):
     @classmethod
@@ -128,14 +128,14 @@ class _CreatableResource(_Resource):
         endpoint = cls.class_url()
         return cls(cls.load_url(endpoint, method='POST', params=params, api_key=api_key))
 
-class _ListableResource(_Resource):
+class _FindableResource(_Resource):
     @classmethod
-    def retrieve(cls, _id, api_key=None):
+    def get(cls, _id, api_key=None):
         endpoint = cls.class_url()
         return cls(cls.load_url("%s/%s" % (endpoint, _id), api_key=api_key ))
 
     @classmethod
-    def all(cls, query={}, limit=10, offset=0, sort=[], api_key=None):
+    def where(cls, query={}, limit=10, offset=0, sort=[], api_key=None):
         endpoint = cls.class_url()
         query['limit'] = limit
         query['offset'] = offset
@@ -151,13 +151,13 @@ class Subscription(_UpdatableResource):
         return "customers/%s/subscription" % (self.parent.id)
 
     def pause(self, finish_billing_cycle=False, until=None, api_key=None):
-        return self.refresh("%s/pause" % self.instance_url(), 'POST', {'until': until}, api_key=api_key)
+        return self.load_via_http_request("%s/pause" % self.instance_url(), 'POST', {'until': until}, api_key=api_key)
 
     def resume(self, api_key=None):
-        return self.refresh("%s/resume" % self.instance_url(), 'POST', None, api_key=api_key)
+        return self.load_via_http_request("%s/resume" % self.instance_url(), 'POST', None, api_key=api_key)
 
     def cancel(self, finish_billing_cycle=False, api_key=None):
-        return self.refresh("%s/cancel" % self.instance_url(), 'POST', None, api_key=api_key)
+        return self.load_via_http_request("%s/cancel" % self.instance_url(), 'POST', None, api_key=api_key)
 
     @property
     def card(self):
@@ -167,16 +167,16 @@ class Subscription(_UpdatableResource):
     def plan(self):
         return Plan.retrieve(self.plan_id)
 
-class Charge(_CreatableResource, _ListableResource):
+class Charge(_CreatableResource, _FindableResource):
     def refund(self, amount=None, api_key=None):
         if amount is None:
-            return self.refresh("%s/refund" % self.instance_url(), api_key=api_key)
+            return self.load_via_http_request("%s/refund" % self.instance_url(), api_key=api_key)
         else:
-            return self.refresh("%s/refund" % self.instance_url(), 'POST', {'amount':amount}, api_key=api_key)
+            return self.load_via_http_request("%s/refund" % self.instance_url(), 'POST', {'amount':amount}, api_key=api_key)
 
-class Plan(_CreatableResource, _UpdatableResource, _DeletableResource, _ListableResource): pass
+class Plan(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource): pass
 
-class Customer(_CreatableResource, _UpdatableResource, _DeletableResource, _ListableResource):
+class Customer(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource):
     def __init__(self, *args, **kwargs):
         super(Customer, self).__init__(*args, **kwargs)
 
@@ -212,7 +212,7 @@ class Customer(_CreatableResource, _UpdatableResource, _DeletableResource, _List
         else:
             return None
 
-class Log(_ListableResource): pass
+class Log(_FindableResource): pass
 
-class Event(_ListableResource): pass
+class Event(_FindableResource): pass
 

@@ -4,6 +4,7 @@ syntax: glob;
 *.swo
 *.swn
 *.swm
+*~
 *.pyc
 test.py
 .DS_Store

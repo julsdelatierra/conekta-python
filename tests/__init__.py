@@ -51,7 +51,7 @@ class BaseEndpointTestCase(unittest.TestCase):
     }
 
     plan_object = {
-        'id':'py-test-plan_' + str(random.randint(1, 1000000)),
+        'id':'py_test_plan_' + str(random.randint(1, 1000000)),
         'name': 'Python Test Subscription',
         'amount': 10000,
         'currency': 'MXN',
