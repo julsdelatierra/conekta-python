@@ -1,6 +1,11 @@
 pyconekta
 =========
 
+##NOT SUPPORTED: If you want to implement conekta wrapper go to https://github.com/conekta/conekta-python
+
+
+Wrapper for api.conekta.io
+
 Install
 
 ```sh
