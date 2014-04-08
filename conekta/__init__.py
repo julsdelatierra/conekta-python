@@ -15,7 +15,7 @@ except ImportError:
 
 API_VERSION = '0.3.0'
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 __author__ = 'Julian Ceballos'
 
 API_BASE = 'https://api.conekta.io/'
@@ -130,7 +130,7 @@ class _CreatableResource(_Resource):
 
 class _FindableResource(_Resource):
     @classmethod
-    def get(cls, _id, api_key=None):
+    def find(cls, _id, api_key=None):
         endpoint = cls.class_url()
         return cls(cls.load_url("%s/%s" % (endpoint, _id), api_key=api_key ))
 
@@ -141,6 +141,11 @@ class _FindableResource(_Resource):
         query['offset'] = offset
         query['sort'] = sort
         return [cls(attributes) for attributes in cls.load_url(endpoint, 'GET', query, api_key=api_key)]
+
+    #DEPRECATED aliased method, will be removed in next major release
+    @classmethod
+    def get(cls, _id, api_key=None):
+        self.find(_id, api_key)
 
 class Card(_UpdatableResource, _DeletableResource): 
     def instance_url(self):
