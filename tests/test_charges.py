@@ -17,7 +17,6 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         assert charge.status == 'paid'
         charge.refund(10000)
         self.assertEqual(charge['status'], 'partially_refunded')
-        print charge.id
         charge.refund()
         self.assertEqual(charge['status'], 'refunded')
         retrieved_charge = self.client.Charge.find(charge.id)
