@@ -12,14 +12,15 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         charge = self.client.Charge.create(self.card_charge_object)
         assert charge.id
         assert charge.status == 'paid'
-        charge.get(charge.id)
+        charge.find(charge.id)
         assert charge.id
         assert charge.status == 'paid'
         charge.refund(10000)
         self.assertEqual(charge['status'], 'partially_refunded')
+        print charge.id
         charge.refund()
         self.assertEqual(charge['status'], 'refunded')
-        retrieved_charge = self.client.Charge.get(charge.id)
+        retrieved_charge = self.client.Charge.find(charge.id)
         assert charge.id
 
     def test_02_cash_charge_done(self):
@@ -48,21 +49,21 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         logs = self.client.Log.where({})
         self.assertIsInstance(logs[0], self.client.Log)
-        retrieved_log = self.client.Log.get(logs[0].id)
+        retrieved_log = self.client.Log.find(logs[0].id)
         assert retrieved_log.id
 
     def test_08_event_complete(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         events = self.client.Event.where({})
         self.assertIsInstance(events[0], self.client.Event)
-        retrieved_event = self.client.Event.get(events[0].id)
+        retrieved_event = self.client.Event.find(events[0].id)
         assert retrieved_event.id
 
     def test_09_plan_create(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         plan = self.client.Plan.create(self.plan_object)
         assert plan.id == self.plan_object['id']
-        plan = self.client.Plan.get(plan.id)
+        plan = self.client.Plan.find(plan.id)
         assert plan.id == self.plan_object['id']
 
     def test_10_customer_create(self):
@@ -104,7 +105,7 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
 
     def test_14_plan_delete(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
-        plan = self.client.Plan.get(self.plan_object['id'])
+        plan = self.client.Plan.find(self.plan_object['id'])
         plan.delete()
         assert plan.deleted
 

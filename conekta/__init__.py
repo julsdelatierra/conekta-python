@@ -145,7 +145,7 @@ class _FindableResource(_Resource):
     #DEPRECATED aliased method, will be removed in next major release
     @classmethod
     def get(cls, _id, api_key=None):
-        self.find(_id, api_key)
+        cls.find(_id, api_key)
 
 class Card(_UpdatableResource, _DeletableResource): 
     def instance_url(self):
