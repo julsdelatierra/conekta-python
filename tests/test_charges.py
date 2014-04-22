@@ -108,3 +108,35 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         plan.delete()
         assert plan.deleted
 
+    def test_15_payee_create(self):
+        self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
+        payee = self.client.Payee.create(self.payee_object)
+        assert payee.name == self.payee_object['name']
+
+    def test_16_payout_methods(self):
+        self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
+        payee = self.client.Payee.where({})[0]
+        payout_method = payee.createPayoutMethod(self.payee_object['payout_method'])
+        assert payout_method.account_number == self.payee_object['payout_method']['account_number']
+        payout_method.update({'account_number':'098765432101234564'})
+        assert payout_method.account_number == '098765432101234564'
+        payout_method.update({'active':False})
+        assert payout_method.active == False
+        payout_method.delete()
+        assert payout_method.deleted
+
+    def test_17_cash_charge_done(self):
+        self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
+        payee = self.client.Payee.where({})[0]
+        assert payee.id
+        print payee.id
+        payout = self.client.Payout.create({
+            'payee': payee.id,
+            'amount': 1000,
+            'currency': 'MXN'
+        })
+
+        assert payout.id
+        assert payout.amount == 1000
+
+

@@ -19,7 +19,7 @@ class BaseEndpointTestCase(unittest.TestCase):
         "reference_id": "9893-cohib_s1_wolf_pack",
         "card": "tok_test_visa_4242"
     }
-    
+
     cash_charge_object = {
         "currency": "MXN",
         "amount": 20000,
@@ -64,4 +64,14 @@ class BaseEndpointTestCase(unittest.TestCase):
         'email':'logan@x-men.org',
         'phone':'403-342-0642',
         'cards':['tok_test_visa_4242', 'tok_test_mastercard_5100']
+    }
+
+    payee_object = {
+        'name': 'Graydon Creed',
+        'email': 'graydon@friendsofhumanity.com',
+        'phone': '5555555555',
+        'payout_method': {
+            'account_number': '123456789012345673',
+            'account_holder': 'Friends of Humanity'
+        }
     }
