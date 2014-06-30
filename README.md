@@ -20,28 +20,18 @@ import conekta
 
 conekta.api_key = '1tv5yJp3xnVZ7eK67m4h'
 
-var data = {
-    "description": "Grad Stogies: Second Class",
-    "amount": 20000,
-    "currency": "MXN",
-    "reference_id": "9893-cohib_s1_wolf_pack",
-    "card": {
-        "number": 4111111111111111,
-        "exp_month": 12,
-        "exp_year": 2015,
-        "name": "Thomas Logan",
-        "cvc": 666,
-        "address": {
-            "street1": "250 Alexis St",
-            "city": "Red Deer",
-            "state": "Alberta",
-            "country": "Canada",
-            "zip": "T4N 0B8"
-        }
-    }
-}
-
-charge = conekta.Charge.create(data)
+try:
+    charge = conekta.Charge.create({
+      "amount": 51000,
+      "currency": "MXN",
+      "description": "Pizza Delivery",
+      "reference_id": "orden_de_id_interno",
+      "card": request.POST["conektaTokenId"] 
+        #request.form["conektaTokenId"], request.params["conektaTokenId"], "tok_a4Ff0dD2xYZZq82d9"
+    })
+except conekta.ConektaError as e:
+    print e.message 
+    #el pago no pudo ser procesado
 
 #You can also get the attributes from the conekta response class:
 print charge.id
