@@ -1,5 +1,7 @@
-Conekta
-=========
+![alt tag](https://raw.github.com/conekta/conekta-python/master/readme_files/cover.png)
+
+Conekta Python v 1.0.1
+======================
 
 Wrapper for api.conekta.io
 
@@ -133,3 +135,7 @@ You can test the conekta library with nose on the conekta library root:
 ```sh
 $ nosetests
 ```
+
+License
+-------
+Developed by [Conekta](https://www.conekta.io). Available with [MIT License](LICENSE).
