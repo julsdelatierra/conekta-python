@@ -23,23 +23,23 @@ import conekta
 conekta.api_key = '1tv5yJp3xnVZ7eK67m4h'
 
 try:
-    charge = conekta.Charge.create({
-      "amount": 51000,
-      "currency": "MXN",
-      "description": "Pizza Delivery",
-      "reference_id": "orden_de_id_interno",
-      "card": request.POST["conektaTokenId"] 
-        #request.form["conektaTokenId"], request.params["conektaTokenId"], "tok_a4Ff0dD2xYZZq82d9"
-    })
+  charge = conekta.Charge.create({
+    "amount": 51000,
+    "currency": "MXN",
+    "description": "Pizza Delivery",
+    "reference_id": "orden_de_id_interno",
+    "card": request.POST["conektaTokenId"] 
+    #request.form["conektaTokenId"], request.params["conektaTokenId"], "tok_a4Ff0dD2xYZZq82d9"
+  })
+
 except conekta.ConektaError as e:
-    print e.message 
-    #el pago no pudo ser procesado
+  print e.message 
+  #El pago no pudo ser procesado
 
 #You can also get the attributes from the conekta response class:
 print charge.id
 
 #Or in the event of an error, you can expect a ConektaError to be raised
-
 ```
 
 Charge via oxxo
@@ -50,18 +50,18 @@ import conekta
 conekta.api_key = '1tv5yJp3xnVZ7eK67m4h'
 
 var data = {
-    "currency": "MXN",
-    "amount": 20000,
-    "description": "Grad Stogies: Second Class",
-    "reference_id": "9893-cohib_s1_wolf_pack",
-    "cash": {
-        "type": "oxxo"
-    },
-    "details": {
-        "name": "Wolverine",
-        "email": "logan.thomas@xmen.org",
-        "phone": "403-342-0642"
-    }
+  "currency": "MXN",
+  "amount": 20000,
+  "description": "Grad Stogies: Second Class",
+  "reference_id": "9893-cohib_s1_wolf_pack",
+  "cash": {
+    "type": "oxxo"
+  },
+  "details": {
+    "name": "Wolverine",
+    "email": "logan.thomas@xmen.org",
+    "phone": "403-342-0642"
+  }
 }
 
 charge = conekta.Charge.create(data)
@@ -80,18 +80,18 @@ import conekta
 conekta.api_key = '1tv5yJp3xnVZ7eK67m4h'
 
 var data = {
-    "currency": "MXN",
-    "amount": 20000,
-    "description": "Grad Stogies: Second Class",
-    "reference_id": "9893-cohib_s1_wolf_pack",
-    "bank": {
-        "type": "banorte"
-    },
-    "details": {
-        "name": "Wolverine",
-        "email": "logan.thomas@xmen.org",
-        "phone": "403-342-0642"
-    }
+  "currency": "MXN",
+  "amount": 20000,
+  "description": "Grad Stogies: Second Class",
+  "reference_id": "9893-cohib_s1_wolf_pack",
+  "bank": {
+    "type": "banorte"
+  },
+  "details": {
+  "name": "Wolverine",
+  "email": "logan.thomas@xmen.org",
+  "phone": "403-342-0642"
+  }
 }
 
 charge = conekta.Charge.create(data)
@@ -100,24 +100,20 @@ charge = conekta.Charge.create(data)
 print charge.id
 
 #Or in the event of an error, you can expect a ConektaError to be raised
-
 ```
 
-
-#Retrieve events
+# Retrieve events
 
 ```python
 import conekta
 
 conekta.api_key = '1tv5yJp3xnVZ7eK67m4h'
-
 events = conekta.Event.all()
-
 ```
 
 ## Endpoints
 
-```
+```python
 conekta.Charge.create()
 conekta.Charge.all()
 conekta.Charge.retrieve('charge_id')
