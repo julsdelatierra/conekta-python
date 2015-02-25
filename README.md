@@ -1,6 +1,6 @@
 ![alt tag](https://raw.github.com/conekta/conekta-python/master/readme_files/cover.png)
 
-Conekta Python v 1.0.1
+Conekta Python v 1.1.1
 ======================
 
 Wrapper for api.conekta.io
