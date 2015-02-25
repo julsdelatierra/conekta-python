@@ -70,8 +70,15 @@ class BaseEndpointTestCase(unittest.TestCase):
         'name': 'Graydon Creed',
         'email': 'graydon@friendsofhumanity.com',
         'phone': '5555555555',
-        'payout_method': {
+        'bank': {
             'account_number': '123456789012345673',
             'account_holder': 'Friends of Humanity'
         }
     }
+
+    payout_method_object = {
+        'type': 'bank_transfer_payout_method',
+        'account_number': '123456789012345673',
+        'account_holder': 'Friends of Humanity'
+    }
+

@@ -179,6 +179,9 @@ class Charge(_CreatableResource, _FindableResource):
         else:
             return self.load_via_http_request("%s/refund" % self.instance_url(), 'POST', {'amount':amount}, api_key=api_key)
 
+    def capture(self, api_key=None):
+        return self.load_via_http_request("%s/capture" % self.instance_url(), api_key=api_key)
+
 class Payout(_CreatableResource, _FindableResource): pass
 
 class PayoutMethod(_UpdatableResource, _DeletableResource): 

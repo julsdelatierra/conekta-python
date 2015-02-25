@@ -112,12 +112,14 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         payee = self.client.Payee.create(self.payee_object)
         assert payee.name == self.payee_object['name']
+        assert payee.payout_methods[0]
+        assert payee.payout_methods[0].account_number == self.payee_object['bank']['account_number']
 
     def test_16_payout_methods(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         payee = self.client.Payee.where({})[0]
-        payout_method = payee.createPayoutMethod(self.payee_object['payout_method'])
-        assert payout_method.account_number == self.payee_object['payout_method']['account_number']
+        payout_method = payee.createPayoutMethod(self.payout_method_object)
+        assert payout_method.account_number == self.payout_method_object['account_number']
         payout_method.update({'account_number':'098765432101234564'})
         assert payout_method.account_number == '098765432101234564'
         payout_method.update({'active':False})
@@ -139,4 +141,13 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         assert payout.id
         assert payout.amount == 1000
 
+    def test_17_cash_charge_done(self):
+        self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
+        charge_hash = self.card_charge_object.copy()
+        charge_hash['capture'] = False
 
+        charge = self.client.Charge.create(charge_hash)
+        assert charge.id
+
+        charge.capture
+        assert charge.status == 'paid'
