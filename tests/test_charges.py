@@ -131,7 +131,6 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         payee = self.client.Payee.where({})[0]
         assert payee.id
-        print payee.id
         payout = self.client.Payout.create({
             'payee': payee.id,
             'amount': 1000,

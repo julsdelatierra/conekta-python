@@ -16,7 +16,7 @@ except ImportError:
 API_VERSION = '0.3.0'
 
 __version__ = '1.1.0'
-__author__ = 'Julian Ceballos'
+__author__ = 'Leo Fischer'
 
 API_BASE = 'https://api.conekta.io/'
 
@@ -45,9 +45,9 @@ class _Resource(object):
     @classmethod
     def build_http_request(cls, method, path, params, _api_key=None):
         if _api_key is None:
-            HEADERS['Authorization'] = 'Basic %s' % (base64.b64encode(api_key + ':'))
+            HEADERS['Authorization'] = 'Basic %s' % (base64.b64encode((api_key + ':').encode('utf-8'))).decode('ascii')
         else:
-            HEADERS['Authorization'] = 'Basic %s' % (base64.b64encode(_api_key + ':'))
+            HEADERS['Authorization'] = 'Basic %s' % (base64.b64encode((_api_key + ':').encode("utf-8"))).decode('ascii')
 
         absolute_url = API_BASE + path
         request = Http(ca_certs=os.path.join(os.path.dirname(__file__), 'ssl_data/ca_bundle.crt')).request
@@ -55,17 +55,19 @@ class _Resource(object):
             if params is None:
                 url = absolute_url
             else:
-                url = "%s?%s" % (absolute_url, urllib.urlencode(params, True))
+                url = "%s?%s" % (absolute_url, urllib.parse.urlencode(params, True))
             headers, body = request(url, method, headers=HEADERS)
         else:
             if params is None:
-                HEADERS['Content-type'] = 'application/x-www-form-urlencoded'
+                #HEADERS['Content-type'] = 'application/x-www-form-urlencoded'
                 HEADERS['Content-length'] = '0'
                 headers, body = request(absolute_url, method, headers=HEADERS, body='')
                 del HEADERS['Content-length']
                 HEADERS['Content-type'] = 'application/json'
             else:
                 headers, body = request(absolute_url, method, headers=HEADERS, body=json.dumps(params))
+
+        body = str(body, 'utf-8')
 
         if headers['status'] == '200' or headers['status'] == '201':
             response_body = json.loads(body)
@@ -79,7 +81,7 @@ class _Resource(object):
 
     @classmethod
     def class_name(cls):
-        return "%s" % urllib.quote_plus(cls.__name__.lower())
+        return "%s" % urllib.parse.quote_plus(cls.__name__.lower())
 
     @classmethod
     def class_url(cls):
