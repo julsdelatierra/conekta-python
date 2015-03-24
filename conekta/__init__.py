@@ -74,7 +74,7 @@ class _Resource(object):
         try:
             body = str(body, 'utf-8')
         except TypeError:
-            str(body).encode('utf-8')
+            body = str(body)
 
         if headers['status'] == '200' or headers['status'] == '201':
             response_body = json.loads(body)
