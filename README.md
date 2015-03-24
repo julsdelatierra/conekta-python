@@ -21,6 +21,7 @@ Charge via card
 import conekta
 
 conekta.api_key = '1tv5yJp3xnVZ7eK67m4h'
+conekta.locale = 'es'
 
 try:
   charge = conekta.Charge.create({
