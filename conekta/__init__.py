@@ -6,10 +6,7 @@ import os
 import base64
 import inspect
 import urllib
-try:
-  from httplib2 import Http
-except ImportError:
-  from httplib import Http
+from httplib2 import Http
 
 try:
     import json
@@ -74,7 +71,10 @@ class _Resource(object):
             else:
                 headers, body = request(absolute_url, method, headers=HEADERS, body=json.dumps(params))
 
-        body = str(body, 'utf-8')
+        try:
+            body = str(body, 'utf-8')
+        except TypeError:
+            str(body).encode('utf-8')
 
         if headers['status'] == '200' or headers['status'] == '201':
             response_body = json.loads(body)
