@@ -26,6 +26,7 @@ HEADERS = {
 }
 
 api_key = ''
+locale = 'en'
 
 class ConektaError(Exception):
   def __init__(self, error_json):
@@ -48,6 +49,9 @@ class _Resource(object):
             HEADERS['Authorization'] = 'Basic %s' % (base64.b64encode((api_key + ':').encode('utf-8'))).decode('ascii')
         else:
             HEADERS['Authorization'] = 'Basic %s' % (base64.b64encode((_api_key + ':').encode("utf-8"))).decode('ascii')
+
+        if not locale is None:
+            HEADERS['Accept-Language'] = locale
 
         absolute_url = API_BASE + path
         request = Http(ca_certs=os.path.join(os.path.dirname(__file__), 'ssl_data/ca_bundle.crt')).request
