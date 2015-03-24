@@ -6,7 +6,10 @@ import os
 import base64
 import inspect
 import urllib
-from httplib2 import Http
+try:
+  from httplib2 import Http
+except ImportError:
+  from httplib import Http
 
 try:
     import json
