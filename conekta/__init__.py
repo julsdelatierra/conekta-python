@@ -55,11 +55,15 @@ class _Resource(object):
             if params is None:
                 url = absolute_url
             else:
-                url = "%s?%s" % (absolute_url, urllib.parse.urlencode(params, True))
+                try:
+                    url = "%s?%s" % (absolute_url, urllib.parse.urlencode(params, True))
+                except AttributeError:
+                    url = "%s?%s" % (absolute_url, urllib.urlencode(params, True))
+                  
             headers, body = request(url, method, headers=HEADERS)
         else:
             if params is None:
-                #HEADERS['Content-type'] = 'application/x-www-form-urlencoded'
+                HEADERS['Content-type'] = 'application/x-www-form-urlencoded'
                 HEADERS['Content-length'] = '0'
                 headers, body = request(absolute_url, method, headers=HEADERS, body='')
                 del HEADERS['Content-length']
@@ -81,7 +85,10 @@ class _Resource(object):
 
     @classmethod
     def class_name(cls):
-        return "%s" % urllib.parse.quote_plus(cls.__name__.lower())
+        try:
+            return "%s" % urllib.parse.quote_plus(cls.__name__.lower())
+        except AttributeError:
+            return "%s" % urllib.quote_plus(cls.__name__.lower())
 
     @classmethod
     def class_url(cls):
