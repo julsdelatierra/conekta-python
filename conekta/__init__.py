@@ -13,7 +13,7 @@ try:
 except ImportError:
     import simplejson as json
 
-API_VERSION = '0.3.0'
+API_VERSION = '1.0.0'
 
 __version__ = '1.1.0'
 __author__ = 'Leo Fischer'
@@ -131,20 +131,24 @@ class _Resource(object):
         return self
 
 class _DeletableResource(_Resource):
+
     def delete(self, params={}, api_key=None):
         return self.load_via_http_request(self.instance_url(), 'DELETE', {}, api_key=api_key)
 
 class _UpdatableResource(_Resource):
+
     def update(self, params={}, api_key=None):
         return self.load_via_http_request(self.instance_url(), 'PUT', params, api_key=api_key)
 
 class _CreatableResource(_Resource):
+
     @classmethod
     def create(cls, params, api_key=None):
         endpoint = cls.class_url()
         return cls(cls.load_url(endpoint, method='POST', params=params, api_key=api_key))
 
 class _FindableResource(_Resource):
+
     @classmethod
     def find(cls, _id, api_key=None):
         endpoint = cls.class_url()
@@ -164,10 +168,12 @@ class _FindableResource(_Resource):
         cls.find(_id, api_key)
 
 class Card(_UpdatableResource, _DeletableResource): 
+
     def instance_url(self):
         return "customers/%s/cards/%s" % (self.parent.id, self.id)
 
 class Subscription(_UpdatableResource):
+
     def instance_url(self):
         return "customers/%s/subscription" % (self.parent.id)
 
@@ -189,6 +195,7 @@ class Subscription(_UpdatableResource):
         return Plan.retrieve(self.plan_id)
 
 class Charge(_CreatableResource, _FindableResource):
+
     def refund(self, amount=None, api_key=None):
         if amount is None:
             return self.load_via_http_request("%s/refund" % self.instance_url(), api_key=api_key)
@@ -201,10 +208,12 @@ class Charge(_CreatableResource, _FindableResource):
 class Payout(_CreatableResource, _FindableResource): pass
 
 class PayoutMethod(_UpdatableResource, _DeletableResource): 
+
     def instance_url(self):
         return "payees/%s/payout_methods/%s" % (self.parent.id, self.id)
 
 class Payee(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource):
+
     def __init__(self, *args, **kwargs):
         super(Payee, self).__init__(*args, **kwargs)
 
@@ -231,6 +240,7 @@ class Payee(_CreatableResource, _UpdatableResource, _DeletableResource, _Findabl
 class Plan(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource): pass
 
 class Customer(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource):
+    
     def __init__(self, *args, **kwargs):
         super(Customer, self).__init__(*args, **kwargs)
 

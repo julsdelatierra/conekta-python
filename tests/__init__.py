@@ -50,6 +50,21 @@ class BaseEndpointTestCase(unittest.TestCase):
         }
     }
 
+    spei_charge_object = {
+        "currency": "MXN",
+        "amount": 20000,
+        "description": "Grad Stogies: Second Class",
+        "reference_id": "9893-cohib_s1_wolf_pack",
+        "bank": {
+            "type": "spei"
+        },
+        "details": {
+            "name": "Wolverine",
+            "email": "logan.thomas@xmen.org",
+            "phone": "403-342-0642"
+        }
+    }
+
     plan_object = {
         'id':'py_test_plan_' + str(random.randint(1, 1000000)),
         'name': 'Python Test Subscription',

@@ -149,4 +149,14 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         assert charge.id
 
         charge.capture
-        assert charge.status == 'paid'
+        assert charge.status == 'pre_authorized'
+
+    def test_18_spei_charge_done(self):
+        self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
+        charge = self.client.Charge.create(self.spei_charge_object)
+        print charge
+        assert charge.id
+
+    def test_19_spei_charge_authentication_fail(self):
+        self.client.api_key = ''
+        self.assertRaises(self.client.ConektaError, self.client.Charge.create, self.spei_charge_object)

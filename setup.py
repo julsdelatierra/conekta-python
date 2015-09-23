@@ -4,14 +4,14 @@
 
 from setuptools import setup, find_packages
 
-version = "1.1.1"
-author = "Julian Ceballos"
+version = "2.0"
+author = "Conekta"
 
 setup(
     name='conekta',
     version=version,
     author=author,
-    author_email='julian@pikhub.com',
+    author_email='soporte@conekta.io',
     url='https://github.com/conekta/conekta-python',
     description='Easy Conekta python wrapper',
     long_description=open('./README.txt', 'r').read(),
