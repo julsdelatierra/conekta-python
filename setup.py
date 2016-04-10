@@ -4,19 +4,18 @@
 
 from setuptools import setup, find_packages
 
-import conekta
-version = str(conekta.__version__)
-author = str(conekta.__author__)
+version = "2.0"
+author = "Conekta"
 
 setup(
     name='conekta',
     version=version,
     author=author,
-    author_email='julian@pikhub.com',
-    url='https://github.com/julianceballos/conekta',
+    author_email='soporte@conekta.io',
+    url='https://github.com/conekta/conekta-python',
     description='Easy Conekta python wrapper',
     long_description=open('./README.txt', 'r').read(),
-    download_url='https://github.com/julianceballos/conekta/tarball/master',
+    download_url='https://github.com/conekta/conekta-python/tarball/master',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
@@ -29,10 +28,11 @@ setup(
     packages=find_packages(),
     install_requires=[
         'httplib2',
-        'simplejson'
+        'simplejson',
+        'nose'
     ],
     license='MIT License',
-    keywords='conekta api',
+    keywords='conekta wrapper',
     include_package_data=True,
     zip_safe=True,
 )
