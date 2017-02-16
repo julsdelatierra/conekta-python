@@ -15,7 +15,7 @@ except ImportError:
 
 API_VERSION = '2.0.0'
 
-__version__ = '1.1.0'
+__version__ = '2.0.0'
 __author__ = 'Leo Fischer'
 
 API_BASE = 'https://api.conekta.io/'
