@@ -99,26 +99,16 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         payment_source = customer.payment_sources[0]
         payment_source.update(self.update_payment_source_object.copy())
         event = customer.payment_sources[0].events()
-        
+
         assert event.total
         assert event.object
 
-    def test_08_customer_fiscal_entity_event(self):
-        self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
-        customer = self.client.Customer.create(self.customer_object.copy())
-        fiscal_entity = customer.fiscal_entities[0]
-        fiscal_entity.update(self.fiscal_entity_object.copy())
-        event = customer.fiscal_entities[0].events()
-        
-        assert event.total
-        assert event.object
-
-    def test_08_customer_shipping_contact_event(self):
+    def test_09_customer_shipping_contact_event(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         customer = self.client.Customer.create(self.customer_object.copy())
         shipping_contact = customer.shipping_contacts[0]
         shipping_contact.update(self.shipping_contact_object.copy())
         event = customer.shipping_contacts[0].events()
-        
+
         assert event.total
         assert event.object

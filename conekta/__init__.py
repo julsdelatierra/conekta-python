@@ -298,9 +298,6 @@ class Order(_CreatableResource, _UpdatableResource, _DeletableResource, _Findabl
         if 'shipping_contact' in attributes.keys():
             self.shipping_contact = ShippingContact(attributes['shipping_contact'])
 
-        if 'fiscal_entity' in attributes.keys():
-            self.fiscal_entity = FiscalEntity(attributes['fiscal_entity'])
-        
         if 'charges' in attributes.keys():
             for charge in attributes['charges']["data"]:
                 payment_method = None
@@ -331,15 +328,10 @@ class Order(_CreatableResource, _UpdatableResource, _DeletableResource, _Findabl
         charge = Charge(Charge.load_url("%s/charges" % self.instance_url(), 'POST', params, api_key=api_key))
         self.charges.append(charge)
         return charge
-    
+
     def createShippingContact(self, params, api_key=None):
         orders = self.update(params)
         self.shipping_contact = ShippingContact(orders['shipping_contact'])
-        return self.shipping_contact
-
-    def createFiscalEntity(self, params, api_key=None):
-        orders = self.update(params)
-        self.shipping_contact =  FiscalEntity(orders['fiscal_entity'])
         return self.shipping_contact
 
     def createLineItem(self, params, api_key=None):
@@ -371,13 +363,12 @@ class PaymentMethod(_UpdatableResource): pass
 class Address(_FindableResource): pass
 
 class Customer(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource, _EventableResource):
-    
+
     def __init__(self, *args, **kwargs):
         super(Customer, self).__init__(*args, **kwargs)
 
         attributes = args[0]
         self.payment_sources   = []
-        self.fiscal_entities   = []
         self.shipping_contacts = []
         if 'payment_sources' in attributes.keys():
             for payment_source in attributes['payment_sources']['data']:
@@ -385,20 +376,13 @@ class Customer(_CreatableResource, _UpdatableResource, _DeletableResource, _Find
                 new_payment_source.parent = self
                 self.payment_sources.append(new_payment_source)
 
-        if 'fiscal_entities' in attributes.keys():
-            for fiscal_entity in attributes['fiscal_entities']['data']:
-                new_fiscal_entity = FiscalEntity(fiscal_entity)
-                new_fiscal_entity.address = Address(fiscal_entity["address"])
-                new_fiscal_entity.parent = self
-                self.fiscal_entities.append(new_fiscal_entity)
-        
         if 'shipping_contacts' in attributes.keys():
             for shipping_contact in attributes['shipping_contacts']['data']:
                 new_shipping_contact = ShippingContact(shipping_contact)
                 new_shipping_contact.address = Address(shipping_contact["address"])
                 new_shipping_contact.parent = self
                 self.shipping_contacts.append(new_shipping_contact)
-        
+
         if 'subscription' in attributes.keys() and isinstance(attributes['subscription'], dict):
             attributes['subscription']['parent'] = self
             self.subscription = Subscription(attributes['subscription'])
@@ -411,13 +395,6 @@ class Customer(_CreatableResource, _UpdatableResource, _DeletableResource, _Find
         payment_source.parent = self
         self.payment_sources.append(payment_source)
         return payment_source
-
-    def createFiscalEntity(self, params, api_key=None):
-        fiscal_ent = PaymentSource.load_url("%s/fiscal_entities" % self.instance_url(), 'POST', params, api_key=api_key)
-        fiscal_entity = FiscalEntity(fiscal_ent)
-        fiscal_entity.parent = self
-        self.fiscal_entities.append(fiscal_entity)
-        return fiscal_entity
 
     def createShippingContact(self, params, api_key=None):
         shipping = PaymentSource.load_url("%s/shipping_contacts" % self.instance_url(), 'POST', params, api_key=api_key)
@@ -547,30 +524,12 @@ class ShippingLine(_CreatableResource, _UpdatableResource, _DeletableResource, _
         return super(ShippingLine, self).delete(params, self.parent.shipping_lines)
 
 class DiscountLine(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource, _EventableResource):
-    
+
     def instance_url(self):
         return "orders/%s/discount_lines" % (self.parent.id)
 
     def delete(self, params={}, api_key=None):
         return super(DiscountLine, self).delete(params, self.parent.discount_lines)
-
-class FiscalEntity(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource):
-    
-    def instance_url(self):
-        return "customer/%s/fiscal_entity" % (self.parent.id)
-
-    def update(self, params={}, api_key=None):
-        uri = "%s/fiscal_entities/%s" % (self.parent.instance_url(), self.id)
-        return self.load_via_http_request(uri, 'PUT', params, api_key=api_key)
-    
-    def delete(self, params={}, api_key=None):
-        uri = "%s/fiscal_entities/%s" % (self.parent.instance_url(), self.id)
-        return super(FiscalEntity, self).delete(params, self.parent.fiscal_entities, uri)
-
-    def events(self, params={}, api_key=None):
-        uri = "%s/fiscal_entities/%s/events" % (self.parent.instance_url(), self.id)
-        event = Event.load_url(uri, 'GET', params, api_key=api_key)
-        return Event(event)
 
 class PaymentSource(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource):
     def instance_url(self):

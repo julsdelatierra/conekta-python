@@ -117,23 +117,10 @@ class BaseEndpointTestCase(unittest.TestCase):
         'phone':'+525511223344',
         'payment_sources':[
           { 'token_id': 'tok_test_visa_4242',
-            'type': 'card'}, 
+            'type': 'card'},
           { 'token_id': 'tok_test_mastercard_5100',
             'type': 'card'}
         ],
-        "fiscal_entities": [{
-        "tax_id": "AMGH851205MN1",
-        "name": "Nike SA de CV",
-        "address": {
-            "street1": "250 Alexis St",
-            "internal_number": "19",
-            "external_number": "91",
-            "city": "Red Deer",
-            "state": "Alberta",
-            "country": "CA",
-            "postal_code": "T4N 0B8"
-        }
-    }],
     "shipping_contacts": [{
         "phone": "+525511223344",
         "receiver": "Marvin Fuller",
@@ -221,19 +208,6 @@ class BaseEndpointTestCase(unittest.TestCase):
               "metadata":{ "soft_validations": True}
           }
       },
-      "fiscal_entity":{
-        "tax_id": "AMGH851205MN1",
-        "name": "Nike SA de CV",
-        "address": {
-            "street1": "250 Alexis St",
-            "internal_number": "19",
-            "external_number": "91",
-            "city": "Red Deer",
-            "state": "Alberta",
-            "country": "CA",
-            "postal_code": "33242"
-        }
-      },
       "charges": [{
         "payment_method":{
           "type":"oxxo_cash"
@@ -289,22 +263,6 @@ class BaseEndpointTestCase(unittest.TestCase):
             "postal_code": "23455",
             "metadata":{ "soft_validations": True}
           }
-      } 
-    }
-
-    fiscal_entity_object = { 
-      "fiscal_entity":{
-        "tax_id": "AMGH851205MN1",
-        "name": "Nike SA de CV",
-        "address": {
-            "street1": "250 Alexis St",
-            "internal_number": "19",
-            "external_number": "91",
-            "city": "Red Deer",
-            "state": "Alberta",
-            "country": "CA",
-            "postal_code": "33242"
-        }
       }
     }
 
@@ -331,20 +289,6 @@ class BaseEndpointTestCase(unittest.TestCase):
             "country": "MX",
             "postal_code": "64700"
         }
-    }
-
-    fiscal_entities_object = {
-      "tax_id": "DKLS8205219WD",
-      "name": "MEH S.A. DE C.V.",
-      "address": {
-          "street1": "Soles",
-          "internal_number": "19a",
-          "external_number": "91c",
-          "city": "Red Deer",
-          "state": "Alberta",
-          "country": "CA",
-          "postal_code": "T4N 0B8"
-      }
     }
 
     shipping_contact_object = {

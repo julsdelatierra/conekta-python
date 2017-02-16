@@ -20,11 +20,10 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         assert discount_lines.code == "descuento"
         assert order.customer_info.name == "John Constantine"
         assert order.shipping_contact.receiver == "Marvin Fuller"
-        assert order.fiscal_entity.name == "Nike SA de CV"
         charge = order.charges[0]
         assert charge.payment_method.service_name == "OxxoPay"
         assert charge.amount == 20000
-    
+
     def test_02_order_create_line_item(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
@@ -68,15 +67,6 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         order = self.client.Order.create(raw_order)
         shipping_contact = order.createShippingContact(self.order_shipping_contact_object.copy())
         assert shipping_contact.phone == "+525511223399"
-    
-    def test_07_order_create_fiscal_entity(self):
-        self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
-        raw_order = self.order_object.copy()
-        raw_order["charges"] = None
-        del raw_order["fiscal_entity"]
-        order = self.client.Order.create(raw_order)
-        fiscal_entity = order.createFiscalEntity(self.fiscal_entity_object.copy())
-        assert fiscal_entity.tax_id == "AMGH851205MN1"
 
     def test_08_order_create_charge(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
