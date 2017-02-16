@@ -312,17 +312,15 @@ class Order(_CreatableResource, _UpdatableResource, _DeletableResource, _Findabl
         order = Order.load_url("%s/capture" % (self.instance_url()), 'PUT', params, api_key=api_key)
         new_order = Order.find(self.id)
         self.charges = new_order.charges
-        self.status = new_order.status
-        self.preauthorize = new_order.preauthorize
+        self.payment_status = new_order.payment_status
         return new_order
 
-    def returns(self, params={}, api_key=None):
-        order_returns = Order.load_url("%s/returns" % (self.instance_url()), 'POST', params, api_key=api_key)
+    def refund(self, params={}, api_key=None):
+        order_refund = Order.load_url("%s/refund" % (self.instance_url()), 'POST', params, api_key=api_key)
         new_order = Order.find(self.id)
         self.charges = new_order.charges
-        self.status = new_order.status
-        self.preauthorize = new_order.preauthorize
-        return OrderReturns(order_returns)
+        self.payment_status = new_order.payment_status
+        return new_order
 
     def charge(self, params, api_key=None):
         charge = Charge(Charge.load_url("%s/charges" % self.instance_url(), 'POST', params, api_key=api_key))

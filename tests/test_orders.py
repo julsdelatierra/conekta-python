@@ -154,22 +154,22 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         charge["payment_method"]["type"] = "card"
         charge["payment_method"]["token_id"] = "tok_test_visa_4242"
         raw_order["charges"] = [charge]
-        raw_order["preauthorize"] = True
+        raw_order["pre_authorize"] = True
         order = self.client.Order.create(raw_order)
-        
-        assert order.preauthorize == True
+
         assert order.charges[0].amount == 20000
         assert order.charges[0].status == "pre_authorized"
-        
+        assert order.payment_status == "pre_authorized"
+
         capture_param = {}
         order.capture(capture_param)
         charge = order.charges[0]
-        
-        assert order.preauthorize == False
+
         assert charge.amount == 20000
         assert charge.status == "paid"
+        assert order.payment_status == "paid"
 
-    def test_15_order_returns(self):
+    def test_15_order_refund(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
         charge = {}
@@ -179,21 +179,14 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         raw_order["charges"] = [charge]
 
         order = self.client.Order.create(raw_order)
-        charge = order.charges[0]
-        order_returns_params = {}
-        
-        order_returns_params["reason"]           = "requested_by_client" 
-        order_returns_params["charge_id"]        = charge.id
-        order_returns_params["metadata"]         = {}
-        order_returns_params["metadata"]["foo"]  = "bar"
-        order_returns_params["amount"]           = 20000 
+        order_refund_params = {}
 
-        order_returns = order.returns(order_returns_params)
+        order_refund_params["reason"] = "requested_by_client"
+        order_refund_params["amount"] = 20000
 
-        assert order_returns.object    == "return"
-        assert order_returns.reason    == "requested_by_client"
-        assert order_returns.parent_id  == order.id
-        assert order_returns.charge_id == charge.id
+        refunded_order = order.refund(order_refund_params)
+
+        assert refunded_order.payment_status == "refunded"
 
     def test_16_order_delete_line_item(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
