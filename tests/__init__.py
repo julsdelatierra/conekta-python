@@ -235,7 +235,7 @@ class BaseEndpointTestCase(unittest.TestCase):
         }
       },
       "charges": [{
-        "payment_source":{
+        "payment_method":{
           "type":"oxxo_cash"
         },
         "amount": 20000
@@ -309,7 +309,7 @@ class BaseEndpointTestCase(unittest.TestCase):
     }
 
     charge_object = {
-      "payment_source":{
+      "payment_method":{
         "type":"oxxo_cash"
       },
       "amount": 20000

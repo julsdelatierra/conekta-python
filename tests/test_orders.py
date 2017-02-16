@@ -146,9 +146,9 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
         charge = {}
-        charge["payment_source"] = {}
-        charge["payment_source"]["type"] = "card"
-        charge["payment_source"]["token_id"] = "tok_test_visa_4242"
+        charge["payment_method"] = {}
+        charge["payment_method"]["type"] = "card"
+        charge["payment_method"]["token_id"] = "tok_test_visa_4242"
         raw_order["charges"] = [charge]
 
         order = self.client.Order.create(raw_order)
@@ -160,9 +160,9 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
         charge = {}
-        charge["payment_source"] = {}
-        charge["payment_source"]["type"] = "card"
-        charge["payment_source"]["token_id"] = "tok_test_visa_4242"
+        charge["payment_method"] = {}
+        charge["payment_method"]["type"] = "card"
+        charge["payment_method"]["token_id"] = "tok_test_visa_4242"
         raw_order["charges"] = [charge]
         raw_order["preauthorize"] = True
         order = self.client.Order.create(raw_order)
@@ -183,9 +183,9 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
         charge = {}
-        charge["payment_source"] = {}
-        charge["payment_source"]["type"] = "card"
-        charge["payment_source"]["token_id"] = "tok_test_visa_4242"
+        charge["payment_method"] = {}
+        charge["payment_method"]["type"] = "card"
+        charge["payment_method"]["token_id"] = "tok_test_visa_4242"
         raw_order["charges"] = [charge]
 
         order = self.client.Order.create(raw_order)
@@ -272,12 +272,12 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         order_params = self.order_object.copy()
         del order_params["customer_info"]
         order_params["customer_info"] = {}
-        order_params["customer_info"]["id"] = customer.id
+        order_params["customer_info"]["customer_id"] = customer.id
 
         charge_params = {}
-        charge_params["payment_source"] = {}
-        charge_params["payment_source"]["type"] = "card"
-        charge_params["payment_source"]["token_id"] = "tok_test_visa_4242"
+        charge_params["payment_method"] = {}
+        charge_params["payment_method"]["type"] = "card"
+        charge_params["payment_method"]["token_id"] = "tok_test_visa_4242"
         order_params["charges"] = [charge_params]
 
         del order_params["shipping_contact"]

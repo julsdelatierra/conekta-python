@@ -80,7 +80,7 @@ try:
         }
       },
       "charges": [{
-        "payment_source":{
+        "payment_method":{
           "type": "card",
           "token_id": "tok_test_visa_4242"
         },
@@ -163,8 +163,8 @@ var data = {
         }
       },
       "charges": [{
-        "payment_source":{
-      "type":"oxxo_cash"
+        "payment_method":{
+          "type":"oxxo_cash"
         },
         "amount": 20000
       }],
@@ -243,8 +243,8 @@ var data = {
         }
       },
       "charges": [{
-        "payment_source":{
-      "type":"banorte"
+        "payment_method":{
+          "type":"banorte"
         },
         "amount": 20000
       }],
