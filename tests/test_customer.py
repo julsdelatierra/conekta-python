@@ -44,7 +44,7 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         customer = self.client.Customer.create(self.customer_object.copy())
         payment_source = customer.payment_sources[0]
         payment_source.update(self.update_payment_source_object.copy())
-        payment_source = customer.payment_sources[0]    
+        payment_source = customer.payment_sources[0]
         assert payment_source.brand == "VISA"
         assert payment_source.last4 == "4242"
 

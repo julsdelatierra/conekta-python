@@ -33,7 +33,7 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         line_item = order.createLineItem(self.line_item_object.copy())
         assert line_item.name == "test line item"
         assert line_item.unit_price == 10000
-    
+
     def test_03_order_create_tax_item(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
@@ -42,7 +42,7 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         tax_line = order.createTaxLine(self.tax_line_object.copy())
         assert tax_line.description == "IVA2"
         assert tax_line.amount == 600
-    
+
     def test_04_order_create_shipping_line(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
@@ -281,13 +281,9 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         order_params["charges"] = [charge_params]
 
         del order_params["shipping_contact"]
-        del order_params["fiscal_entity"]
         order = self.client.Order.create(order_params)
 
         charge = order.charges[0]
 
         assert charge.status == "paid"
         assert charge.amount == 20000
-
-
-        

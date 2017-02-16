@@ -202,7 +202,7 @@ class BaseEndpointTestCase(unittest.TestCase):
           "type": "loyalty",
           "amount": 600
         }],
-      "customer_info":{   
+      "customer_info":{
           "name": "John Constantine",
           "phone": "+525533445566",
           "email": "john@meh.com",
@@ -277,7 +277,7 @@ class BaseEndpointTestCase(unittest.TestCase):
         "amount": 100
     }
 
-    order_shipping_contact_object = { 
+    order_shipping_contact_object = {
       "shipping_contact": {
         "phone" : "+525511223399",
         "receiver": "Marvin Fuller",
@@ -315,7 +315,7 @@ class BaseEndpointTestCase(unittest.TestCase):
       "amount": 20000
     }
 
-    payment_source_object = { 
+    payment_source_object = {
       'token_id': 'tok_test_visa_4242',
       'type': 'card'
     }

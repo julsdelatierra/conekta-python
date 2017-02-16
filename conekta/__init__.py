@@ -70,7 +70,7 @@ class _Resource(object):
                     url = "%s?%s" % (absolute_url, urllib.parse.urlencode(params, True))
                 except AttributeError:
                     url = "%s?%s" % (absolute_url, urllib.urlencode(params, True))
-                  
+
             headers, body = request(url, method, headers=HEADERS)
         else:
             if params is None:
@@ -90,9 +90,9 @@ class _Resource(object):
         if headers['status'] == '200' or headers['status'] == '201':
             response_body = json.loads(body)
             return response_body
-        
+
         if headers['status'] == '400' or headers['status'] == '400':
-            raise MalformedRequestError(json.loads(body))    
+            raise MalformedRequestError(json.loads(body))
         elif headers['status'] == '401' or headers['status'] == '401':
             raise AuthenticationError(json.loads(body))
         elif headers['status'] == '402' or headers['status'] == '402':
@@ -102,7 +102,7 @@ class _Resource(object):
         elif headers['status'] == '422' or headers['status'] == '422':
             raise ParameterValidationError(json.loads(body))
         elif headers['status'] == '500' or headers['status'] == '500':
-            raise ApiError(json.loads(body))                 
+            raise ApiError(json.loads(body))
         else:
             raise ConektaError(json.loads(body))
 
@@ -166,12 +166,12 @@ class _DeletableResource(_Resource):
     def delete(self, params={}, list_to_remove=None, uri=None, api_key=None):
         if uri is None:
             uri = self.instance_url()
-            
+
             if hasattr(self, 'parent'):
                 uri = "%s/%s" % (self.instance_url(), self.id)
 
-        
-        
+
+
         object_reponse = self.load_via_http_request(uri, 'DELETE', {}, api_key=api_key)
 
         if list_to_remove != None:
@@ -186,7 +186,7 @@ class _UpdatableResource(_Resource):
 
     def update(self, params={}, api_key=None):
         uri = self.instance_url()
-        
+
         if hasattr(self, 'parent'):
             uri = "%s/%s" % (self.instance_url(), self.id)
         return self.load_via_http_request(uri, 'PUT', params, api_key=api_key)
@@ -209,7 +209,7 @@ class _FindableResource(_Resource):
     def where(cls, query={}, limit=10, offset=0, sort=[], api_key=None):
         endpoint = cls.class_url()
         query['limit'] = limit
-        
+
         response = cls.load_url(endpoint, 'GET', query, api_key=api_key)
         pag = Pagination(response)
         data = response["data"]
@@ -229,7 +229,7 @@ class _FindableResource(_Resource):
                 new_obj = Log(obj)
                 pag.class_name = Log
 
-            pag.data.append(new_obj)        
+            pag.data.append(new_obj)
 
 
         return pag
@@ -239,7 +239,7 @@ class _FindableResource(_Resource):
     def get(cls, _id, api_key=None):
         cls.find(_id, api_key)
 
-class Card(_UpdatableResource, _DeletableResource): 
+class Card(_UpdatableResource, _DeletableResource):
 
     def instance_url(self):
         return "customers/%s/cards/%s" % (self.parent.id, self.id)
@@ -273,7 +273,7 @@ class Order(_CreatableResource, _UpdatableResource, _DeletableResource, _Findabl
                 new_line_item = LineItem(line_item)
                 new_line_item.parent = self
                 self.line_items.append(new_line_item)
-        
+
         if 'tax_lines' in attributes.keys():
             for tax_line in attributes['tax_lines']["data"]:
                 new_tax_line = TaxLine(tax_line)
@@ -491,7 +491,7 @@ class Pagination(_CreatableResource):
             query[key_and_param[0]] = key_and_param[1]
         return self.class_name.where(query)
 
-class PayoutMethod(_UpdatableResource, _DeletableResource): 
+class PayoutMethod(_UpdatableResource, _DeletableResource):
 
     def instance_url(self):
         return "payees/%s/payout_methods/%s" % (self.parent.id, self.id)
@@ -523,7 +523,7 @@ class Subscription(_UpdatableResource):
 class Webhook(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource): pass
 
 class LineItem(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource, _EventableResource):
-    
+
     def instance_url(self):
         return "orders/%s/line_items" % (self.parent.id)
 
@@ -531,7 +531,7 @@ class LineItem(_CreatableResource, _UpdatableResource, _DeletableResource, _Find
         return super(LineItem, self).delete(params, self.parent.line_items)
 
 class TaxLine(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource, _EventableResource):
-    
+
     def instance_url(self):
         return "orders/%s/tax_lines" % (self.parent.id)
 
@@ -539,7 +539,7 @@ class TaxLine(_CreatableResource, _UpdatableResource, _DeletableResource, _Finda
         return super(TaxLine, self).delete(params, self.parent.tax_lines)
 
 class ShippingLine(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource, _EventableResource):
-    
+
     def instance_url(self):
         return "orders/%s/shipping_lines" % (self.parent.id)
 
@@ -585,7 +585,7 @@ class PaymentSource(_CreatableResource, _UpdatableResource, _DeletableResource, 
         return Event(event)
 
 class ShippingContact(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource):
-    
+
     def instance_url(self):
         return "customers/%s/shipping_contacts" % (self.parent.id)
 
@@ -600,5 +600,3 @@ class ShippingContact(_CreatableResource, _UpdatableResource, _DeletableResource
     def events(self, params={}, api_key=None):
         uri = "%s/shipping_contacts/%s/events" % (self.parent.instance_url(), self.id)
         return Event(Event.load_url(uri, 'GET', params, api_key=api_key))
-
-
