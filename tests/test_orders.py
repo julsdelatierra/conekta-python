@@ -20,11 +20,10 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         assert discount_lines.code == "descuento"
         assert order.customer_info.name == "John Constantine"
         assert order.shipping_contact.receiver == "Marvin Fuller"
-        assert order.fiscal_entity.name == "Nike SA de CV"
         charge = order.charges[0]
         assert charge.payment_method.service_name == "OxxoPay"
         assert charge.amount == 20000
-    
+
     def test_02_order_create_line_item(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
@@ -33,7 +32,7 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         line_item = order.createLineItem(self.line_item_object.copy())
         assert line_item.name == "test line item"
         assert line_item.unit_price == 10000
-    
+
     def test_03_order_create_tax_item(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
@@ -42,7 +41,7 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         tax_line = order.createTaxLine(self.tax_line_object.copy())
         assert tax_line.description == "IVA2"
         assert tax_line.amount == 600
-    
+
     def test_04_order_create_shipping_line(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
@@ -68,15 +67,6 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         order = self.client.Order.create(raw_order)
         shipping_contact = order.createShippingContact(self.order_shipping_contact_object.copy())
         assert shipping_contact.phone == "+525511223399"
-    
-    def test_07_order_create_fiscal_entity(self):
-        self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
-        raw_order = self.order_object.copy()
-        raw_order["charges"] = None
-        del raw_order["fiscal_entity"]
-        order = self.client.Order.create(raw_order)
-        fiscal_entity = order.createFiscalEntity(self.fiscal_entity_object.copy())
-        assert fiscal_entity.tax_id == "AMGH851205MN1"
 
     def test_08_order_create_charge(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
@@ -146,9 +136,9 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
         charge = {}
-        charge["payment_source"] = {}
-        charge["payment_source"]["type"] = "card"
-        charge["payment_source"]["token_id"] = "tok_test_visa_4242"
+        charge["payment_method"] = {}
+        charge["payment_method"]["type"] = "card"
+        charge["payment_method"]["token_id"] = "tok_test_visa_4242"
         raw_order["charges"] = [charge]
 
         order = self.client.Order.create(raw_order)
@@ -160,50 +150,43 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
         charge = {}
-        charge["payment_source"] = {}
-        charge["payment_source"]["type"] = "card"
-        charge["payment_source"]["token_id"] = "tok_test_visa_4242"
+        charge["payment_method"] = {}
+        charge["payment_method"]["type"] = "card"
+        charge["payment_method"]["token_id"] = "tok_test_visa_4242"
         raw_order["charges"] = [charge]
-        raw_order["preauthorize"] = True
+        raw_order["pre_authorize"] = True
         order = self.client.Order.create(raw_order)
-        
-        assert order.preauthorize == True
+
         assert order.charges[0].amount == 20000
         assert order.charges[0].status == "pre_authorized"
-        
+        assert order.payment_status == "pre_authorized"
+
         capture_param = {}
         order.capture(capture_param)
         charge = order.charges[0]
-        
-        assert order.preauthorize == False
+
         assert charge.amount == 20000
         assert charge.status == "paid"
+        assert order.payment_status == "paid"
 
-    def test_15_order_returns(self):
+    def test_15_order_refund(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
         charge = {}
-        charge["payment_source"] = {}
-        charge["payment_source"]["type"] = "card"
-        charge["payment_source"]["token_id"] = "tok_test_visa_4242"
+        charge["payment_method"] = {}
+        charge["payment_method"]["type"] = "card"
+        charge["payment_method"]["token_id"] = "tok_test_visa_4242"
         raw_order["charges"] = [charge]
 
         order = self.client.Order.create(raw_order)
-        charge = order.charges[0]
-        order_returns_params = {}
-        
-        order_returns_params["reason"]           = "requested_by_client" 
-        order_returns_params["charge_id"]        = charge.id
-        order_returns_params["metadata"]         = {}
-        order_returns_params["metadata"]["foo"]  = "bar"
-        order_returns_params["amount"]           = 20000 
+        order_refund_params = {}
 
-        order_returns = order.returns(order_returns_params)
+        order_refund_params["reason"] = "requested_by_client"
+        order_refund_params["amount"] = 20000
 
-        assert order_returns.object    == "return"
-        assert order_returns.reason    == "requested_by_client"
-        assert order_returns.parent_id  == order.id
-        assert order_returns.charge_id == charge.id
+        refunded_order = order.refund(order_refund_params)
+
+        assert refunded_order.payment_status == "refunded"
 
     def test_16_order_delete_line_item(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
@@ -272,22 +255,18 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         order_params = self.order_object.copy()
         del order_params["customer_info"]
         order_params["customer_info"] = {}
-        order_params["customer_info"]["id"] = customer.id
+        order_params["customer_info"]["customer_id"] = customer.id
 
         charge_params = {}
-        charge_params["payment_source"] = {}
-        charge_params["payment_source"]["type"] = "card"
-        charge_params["payment_source"]["token_id"] = "tok_test_visa_4242"
+        charge_params["payment_method"] = {}
+        charge_params["payment_method"]["type"] = "card"
+        charge_params["payment_method"]["token_id"] = "tok_test_visa_4242"
         order_params["charges"] = [charge_params]
 
         del order_params["shipping_contact"]
-        del order_params["fiscal_entity"]
         order = self.client.Order.create(order_params)
 
         charge = order.charges[0]
 
         assert charge.status == "paid"
         assert charge.amount == 20000
-
-
-        
