@@ -14,9 +14,8 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         assert customer.name  == 'James Howlett'
         assert customer.email == 'logan@x-men.org'
         assert customer.phone == '+525511223344'
-
-        assert payment_source.brand == 'VISA'
-        assert payment_source.last4 == '4242'
+        assert payment_source.brand == 'VISA' or payment_source.brand == 'MC'
+        assert payment_source.last4 == '4242' or payment_source.last4 == '5100'
         assert payment_source.type  == 'card'
 
         assert shipping_contact.receiver        == "Marvin Fuller"
@@ -39,8 +38,8 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         payment_source = customer.payment_sources[0]
         payment_source.update(self.update_payment_source_object.copy())
         payment_source = customer.payment_sources[0]
-        assert payment_source.brand == "VISA"
-        assert payment_source.last4 == "4242"
+        assert payment_source.brand == 'VISA' or payment_source.brand == 'MC'
+        assert payment_source.last4 == '4242' or payment_source.last4 == '5100'
 
     def test_04_customer_delete_payment_source(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
@@ -53,8 +52,8 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
 
         payment_source = customer.payment_sources[0]
 
-        assert payment_source.last4 == "5100"
-        assert payment_source.brand == "MC"
+        assert payment_source.brand == 'VISA' or payment_source.brand == 'MC'
+        assert payment_source.last4 == '4242' or payment_source.last4 == '5100'
 
     def test_08_customer_add_shipping_contact(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
@@ -66,3 +65,12 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         assert shipping_contact.phone           == "+525511008811"
         assert shipping_contact.receiver        == "Dr. Manhatan"
         assert shipping_contact.between_streets == "some streets"
+
+    def test_09_customer_update_plan(self):
+        self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
+        customer = self.client.Customer.create(self.customer_object.copy())
+        customer.createSubscription({"plan":"gold-plan"})
+        customer.subscription.update({"plan":"opal-plan"})
+        customer2 = self.client.Customer.find(customer.id)
+
+        assert customer2.subscription.plan_id == "opal-plan"

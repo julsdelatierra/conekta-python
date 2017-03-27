@@ -6,6 +6,7 @@ import os
 import base64
 import inspect
 import urllib
+import time
 from httplib2 import Http
 
 try:
@@ -186,9 +187,10 @@ class _UpdatableResource(_Resource):
 
     def update(self, params={}, api_key=None):
         uri = self.instance_url()
-
-        if hasattr(self, 'parent'):
+        
+        if hasattr(self, 'parent') and not isinstance(self, Subscription):
             uri = "%s/%s" % (self.instance_url(), self.id)
+
         return self.load_via_http_request(uri, 'PUT', params, api_key=api_key)
 
 class _CreatableResource(_Resource):
@@ -310,6 +312,7 @@ class Order(_CreatableResource, _UpdatableResource, _DeletableResource, _Findabl
 
     def capture(self, params={}, api_key=None):
         order = Order.load_url("%s/capture" % (self.instance_url()), 'PUT', params, api_key=api_key)
+        time.sleep(2)
         new_order = Order.find(self.id)
         self.charges = new_order.charges
         self.payment_status = new_order.payment_status
@@ -317,6 +320,7 @@ class Order(_CreatableResource, _UpdatableResource, _DeletableResource, _Findabl
 
     def refund(self, params={}, api_key=None):
         order_refund = Order.load_url("%s/refund" % (self.instance_url()), 'POST', params, api_key=api_key)
+        time.sleep(2)
         new_order = Order.find(self.id)
         self.charges = new_order.charges
         self.payment_status = new_order.payment_status

@@ -1,6 +1,6 @@
 ![alt tag](https://raw.github.com/conekta/conekta-python/master/readme_files/cover.png)
 
-Conekta Python v 2.0.0
+Conekta Python v 2.3.3
 ======================
 
 Wrapper for api.conekta.io
@@ -91,7 +91,7 @@ try:
     })
 
 except conekta.ConektaError as e:
-  print e.message 
+  print e.message
   #El pago no pudo ser procesado
 
 #You can also get the attributes from the conekta response class:
@@ -332,6 +332,5 @@ Developed by [Conekta](https://www.conekta.io). Available with [MIT License](LIC
 We are hiring
 -------------
 
-If you are a comfortable working with a range of backend languages (Java, Python, Ruby, PHP, etc) and frameworks, you have solid foundation in data structures, algorithms and software design with strong analytical and debugging skills. 
+If you are a comfortable working with a range of backend languages (Java, Python, Ruby, PHP, etc) and frameworks, you have solid foundation in data structures, algorithms and software design with strong analytical and debugging skills.
 Send your CV, github to quieroser@conekta.io
-

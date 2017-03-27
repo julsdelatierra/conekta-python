@@ -2,4 +2,8 @@
 
 * Order's submodels added. New Order flow
 * Supporting now API 2.0
-* Check https://www.conekta.io/es/docs/api v1.1 for further information
+* Check https://www.conekta.io/es/docs/api v2.0 for further information
+
+=== 2.3.3 2017-03-24
+
+* Fix Subscriptions for Customer
