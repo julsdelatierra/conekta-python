@@ -1,6 +1,6 @@
 ![alt tag](https://raw.github.com/conekta/conekta-python/master/readme_files/cover.png)
 
-Conekta Python v 2.3.3
+Conekta Python v 2.3.4
 ======================
 
 Wrapper for api.conekta.io
@@ -288,6 +288,7 @@ conekta.Order.createTaxLine()
 conekta.Order.createShippingLine()
 conekta.Order.createDiscountLine()
 conekta.Order.events()
+conekta.Order.void()
 
 conekta.Customer.create()
 conekta.Customer.find()
