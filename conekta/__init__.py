@@ -326,6 +326,14 @@ class Order(_CreatableResource, _UpdatableResource, _DeletableResource, _Findabl
         self.payment_status = new_order.payment_status
         return new_order
 
+    def void(self, params={}, api_key=None):
+        order_refund = Order.load_url("%s/void" % (self.instance_url()), 'POST', params, api_key=api_key)
+        time.sleep(2)
+        new_order = Order.find(self.id)
+        self.charges = new_order.charges
+        self.payment_status = new_order.payment_status
+        return new_order
+
     def charge(self, params, api_key=None):
         charge = Charge(Charge.load_url("%s/charges" % self.instance_url(), 'POST', params, api_key=api_key))
         self.charges.append(charge)

@@ -188,6 +188,25 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
 
         assert refunded_order.payment_status == "refunded"
 
+    def test_15_order_void(self):
+        self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
+        raw_order = self.order_object.copy()
+        charge = {}
+        charge["payment_method"] = {}
+        charge["payment_method"]["type"] = "card"
+        charge["payment_method"]["token_id"] = "tok_test_visa_4242"
+        raw_order["charges"] = [charge]
+        raw_order["pre_authorize"] = True
+        order = self.client.Order.create(raw_order)
+
+        assert order.charges[0].amount == 20000
+        assert order.charges[0].status == "pre_authorized"
+        assert order.payment_status == "pre_authorized"
+
+        refunded_order = order.void()
+        
+        assert refunded_order.payment_status == "voided"
+
     def test_16_order_delete_line_item(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
