@@ -270,8 +270,11 @@ class Order(_CreatableResource, _UpdatableResource, _DeletableResource, _Findabl
         self.shipping_lines = []
         self.discount_lines = []
         self.charges = []
+        query = {}
         if 'line_items' in attributes.keys():
-            for line_item in attributes['line_items']["data"]:
+            endpoint = 'orders/{}/line_items'.format(attributes['id'])
+            response = self.load_url(endpoint,'GET',query,api_key=api_key)
+            for line_item in response["data"]:
                 new_line_item = LineItem(line_item)
                 new_line_item.parent = self
                 self.line_items.append(new_line_item)

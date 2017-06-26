@@ -68,7 +68,7 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         shipping_contact = order.createShippingContact(self.order_shipping_contact_object.copy())
         assert shipping_contact.phone == "+525511223399"
 
-    def test_08_order_create_charge(self):
+    def test_07_order_create_charge(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
         del raw_order["charges"]
@@ -77,7 +77,7 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         assert charge.object == "charge"
         assert charge.status == "pending_payment"
 
-    def test_09_order_update_line_item(self):
+    def test_08_order_update_line_item(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
         raw_order = self.order_object.copy()
         del raw_order["charges"]
@@ -92,6 +92,15 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         line_item = order.line_items[0]
         assert line_item.unit_price == 30000
         assert line_item.description == "some description"
+
+    def test_09_order_get_all_line_items(self):
+        self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
+
+        large_order_by_find  = self.client.Order.find('ord_2gm57Wc4cVQ2yfqR3')
+        large_order_by_where = self.client.Order.where({'id':'ord_2gm57Wc4cVQ2yfqR3'})
+
+        assert len(large_order_by_where.data[0].line_items) == 15
+        assert len(large_order_by_find.line_items) == 15
 
     def test_10_order_update_tax_line(self):
         self.client.api_key = '1tv5yJp3xnVZ7eK67m4h'
