@@ -7,6 +7,7 @@ import base64
 import inspect
 import urllib
 import time
+import platform
 from httplib2 import Http
 
 try:
@@ -16,14 +17,23 @@ except ImportError:
 
 API_VERSION = '2.0.0'
 
-__version__ = '2.3.1'
+__version__ = '2.3.4'
 __author__ = 'Leo Fischer'
 
 API_BASE = 'https://api.conekta.io/'
 
+data = {
+    'lang' : 'python',
+    'lang_version' : platform.python_version(),
+    'publisher' : 'conekta',
+    'bindings_version' : __version__,
+    'uname' : platform.uname()
+}
+
 HEADERS = {
     'Accept': 'application/vnd.conekta-v%s+json' % (API_VERSION),
-    'Content-type': 'application/json'
+    'Content-type': 'application/json',
+    'X-Conekta-Client-User-Agent' : json.dumps(data)
 }
 
 api_key = ''
@@ -187,7 +197,7 @@ class _UpdatableResource(_Resource):
 
     def update(self, params={}, api_key=None):
         uri = self.instance_url()
-        
+
         if hasattr(self, 'parent') and not isinstance(self, Subscription):
             uri = "%s/%s" % (self.instance_url(), self.id)
 
