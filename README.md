@@ -1,6 +1,6 @@
 ![alt tag](https://raw.github.com/conekta/conekta-python/master/readme_files/cover.png)
 
-Conekta Python v 2.3.4
+Conekta Python v 2.3.5
 ======================
 
 Wrapper for api.conekta.io
@@ -47,7 +47,7 @@ try:
              "random_key": "random_value"
           }
         }],
-      "customer_info":{   
+      "customer_info":{
           "name": "John Constantine",
           "phone": "+525533445566",
           "email": "john@meh.com",
@@ -130,7 +130,7 @@ var data = {
              "random_key": "random_value"
           }
         }],
-      "customer_info":{   
+      "customer_info":{
           "name": "John Constantine",
           "phone": "+525533445566",
           "email": "john@meh.com",
@@ -210,7 +210,7 @@ var data = {
              "random_key": "random_value"
           }
         }],
-      "customer_info":{   
+      "customer_info":{
           "name": "John Constantine",
           "phone": "+525533445566",
           "email": "john@meh.com",
