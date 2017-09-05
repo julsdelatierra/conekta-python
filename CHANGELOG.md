@@ -57,6 +57,6 @@
 - Change in refunds, logs and object queries
 - Breaking changes to object structure and usage
 
-## [0.6.0](https://github.com/conekta/conekta-python/releases/tag/v0.6) - 2013-10-30
+## [0.6.0](https://github.com/conekta/conekta-python/releases/tag/v0.6) - 2013-09-30
 ### Feature
 - Get all events
