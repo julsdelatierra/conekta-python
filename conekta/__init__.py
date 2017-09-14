@@ -5,10 +5,10 @@
 import os
 import base64
 import inspect
+import requests
 import urllib
 import time
 import platform
-from httplib2 import Http
 
 try:
     import json
@@ -72,7 +72,7 @@ class _Resource(object):
             HEADERS['Accept-Language'] = locale
 
         absolute_url = API_BASE + path
-        request = Http(ca_certs=os.path.join(os.path.dirname(__file__), 'ssl_data/ca_bundle.crt')).request
+        CA_PATH = os.path.join(os.path.dirname(__file__), 'ssl_data/ca_bundle.crt')
         if method == 'GET':
             if params is None:
                 url = absolute_url
@@ -81,18 +81,15 @@ class _Resource(object):
                     url = "%s?%s" % (absolute_url, urllib.parse.urlencode(params, True))
                 except AttributeError:
                     url = "%s?%s" % (absolute_url, urllib.urlencode(params, True))
-
-            headers, body = request(url, method, headers=HEADERS)
+            body = requests.request(method, url, headers=HEADERS, verify=CA_PATH)
         else:
             if params is None:
-                HEADERS['Content-type'] = 'application/x-www-form-urlencoded'
-                HEADERS['Content-length'] = '0'
-                headers, body = request(absolute_url, method, headers=HEADERS, body='')
-                del HEADERS['Content-length']
-                HEADERS['Content-type'] = 'application/json'
-            else:
-                headers, body = request(absolute_url, method, headers=HEADERS, body=json.dumps(params))
-
+                params = ''
+            body = requests.request(method, absolute_url, headers=HEADERS, verify=CA_PATH, data=json.dumps(params))
+            
+        headers = body.headers
+        headers['status'] = str(body.status_code)
+        body = body._content
         try:
             body = str(body, 'utf-8')
         except TypeError:

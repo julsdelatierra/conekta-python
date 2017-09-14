@@ -27,9 +27,9 @@ setup(
         ],
     packages=find_packages(),
     install_requires=[
-        'httplib2',
         'simplejson',
-        'nose'
+        'nose',
+        'requests'
     ],
     license='MIT License',
     keywords='conekta wrapper',
