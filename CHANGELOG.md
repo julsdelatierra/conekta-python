@@ -1,3 +1,7 @@
+## [2.4.0](https://github.com/conekta/conekta-python/releases/tag/v2.4.0) - 2017-09-18
+### Change
+- Change httplib2 library for requests
+
 ## [2.3.4](https://github.com/conekta/conekta-python/releases/tag/v2.3.4) - 2017-06-08
 ### Feature
 - Add void method for the class Order
