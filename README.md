@@ -1,6 +1,6 @@
 ![README Cover Image](readme_cover.png)
 
-Conekta Python v 2.3.6
+Conekta Python v 2.4.0
 ======================
 
 Wrapper for api.conekta.io
