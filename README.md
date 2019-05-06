@@ -1,7 +1,13 @@
-![README Cover Image](readme_cover.png)
+<div align="center">
 
-Conekta Python v 2.4.0
-======================
+![banner](readme_files/banner.png)
+
+# Conekta Python v2.4.0
+
+![python badge](readme_files/python-badge.png)
+![conekta badge](readme_files/conekta-badge.png)
+
+</div>
 
 Wrapper for api.conekta.io
 
