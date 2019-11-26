@@ -11,11 +11,19 @@
 
 Wrapper for api.conekta.io
 
-Install
+Install with pip
 
 ```sh
 pip install conekta
 ```
+
+or explicitly with pip3 in python3:
+
+```sh
+pip install conekta
+```
+
+Alternatively you can install with easy_install
 
 ```sh
 easy_install conekta
@@ -97,11 +105,12 @@ try:
     })
 
 except conekta.ConektaError as e:
-  print e.message
-  #El pago no pudo ser procesado
+  print(e.message)       #returns a human readable message
+  print(e.code)          #returns a standardized error code
+  print(str(e.details))  #prints all error details
 
 #You can also get the attributes from the conekta response class:
-print order.id
+print(order.id)
 
 #Or in the event of an error, you can expect a ConektaError to be raised
 ```
@@ -181,7 +190,7 @@ var data = {
 order = conekta.Order.create(data)
 
 #Also you can get the attributes from the conekta response class:
-print order.id
+print(order.id)
 
 #Or in the event of an error, you can expect a ConektaError to be raised
 ```
@@ -262,7 +271,7 @@ var data = {
 order = conekta.Order.create(data)
 
 #Also you can get the attributes from the conekta response class:
-print Order.id
+print(order.id)
 
 #Or in the event of an error, you can expect a ConektaError to be raised
 ```
@@ -313,23 +322,29 @@ conekta.Log.where({})
 You can test the conekta library with nose from the conekta library root:
 
 ```sh
-$ nosetests
+$ nosetests --exe
 ```
 
-To simplify the development and testing process we have provided dockers with the code preloaded, in python 2.7:
+or in python 3:
 
-```shell
-docker pull conekta/conekta-python2.7
-
-docker run -ti conekta/conekta-python2.7 /bin/bash --login
+```sh
+$ python3 -m "nose" --exe
 ```
 
-and in python 3.4:
+To simplify the development and testing process we have provided a sample docker files in the dockers folder.  You can build and run them with something like:
 
 ```shell
-docker pull conekta/conekta-python3.5
+docker build -f Dockerfiles/python2/Dockerfile -t conekta/conekta-python2 .
 
-docker run -ti conekta/conekta-python3.5 /bin/bash --login
+docker run -ti conekta/conekta-python2 /bin/bash --login
+```
+
+and in python 3.X:
+
+```shell
+docker build -f Dockerfile/python3/Dockerfile -t conekta/conekta-python3 .
+
+docker run -ti conekta/conekta-python3 /bin/bash --login
 ```
 
 ## License
