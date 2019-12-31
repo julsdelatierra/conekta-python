@@ -43,6 +43,25 @@ class ConektaError(Exception):
   def __init__(self, error_json):
       super(ConektaError, self).__init__(error_json)
       self.error_json = error_json
+      try:
+        self.details = self.error_json['details']
+        self.message = self.details[0]['message']
+        self.debug_message = self.details[0]['debug_message']
+        self.code = self.details[0]['code']
+      except Exception:
+        self.details = [
+            {
+                "message": "Hubo un error de comunicación Por favor intenta más tarde.",
+                "debug_message": "Error message was unparsable",
+                "code": "conekta.error.unparsable_error"
+            }
+        ]
+        self.message = "Hubo un error de comunicación Por favor intenta más tarde."
+        self.debug_message = "Error message was unparsable"
+        self.code = "conekta.error.unparsable_error"
+
+  def __str__(self):
+      str(self.message)
 
 class MalformedRequestError(ConektaError): pass
 class AuthenticationError(ConektaError): pass

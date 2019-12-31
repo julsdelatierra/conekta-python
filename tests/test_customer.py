@@ -14,7 +14,7 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         assert customer.name  == 'James Howlett'
         assert customer.email == 'logan@x-men.org'
         assert customer.phone == '+525511223344'
-        assert payment_source.brand == 'VISA' or payment_source.brand == 'MC'
+        assert payment_source.brand.lower() == 'visa' or payment_source.brand.lower() == 'mc'
         assert payment_source.last4 == '4242' or payment_source.last4 == '5100'
         assert payment_source.type  == 'card'
 
@@ -29,7 +29,7 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         customer = self.client.Customer.create(customer_params)
         payment_source = customer.createPaymentSource(self.payment_source_object.copy())
 
-        assert payment_source.brand == "VISA"
+        assert payment_source.brand.lower() == "visa"
         assert payment_source.last4 == "4242"
 
     def test_03_customer_update_payment_source(self):
@@ -38,7 +38,7 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
         payment_source = customer.payment_sources[0]
         payment_source.update(self.update_payment_source_object.copy())
         payment_source = customer.payment_sources[0]
-        assert payment_source.brand == 'VISA' or payment_source.brand == 'MC'
+        assert payment_source.brand.lower() == 'visa' or payment_source.brand.lower() == 'mc'
         assert payment_source.last4 == '4242' or payment_source.last4 == '5100'
 
     def test_04_customer_delete_payment_source(self):
@@ -52,7 +52,7 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
 
         payment_source = customer.payment_sources[0]
 
-        assert payment_source.brand == 'VISA' or payment_source.brand == 'MC'
+        assert payment_source.brand.lower() == 'visa' or payment_source.brand.lower() == 'mc'
         assert payment_source.last4 == '4242' or payment_source.last4 == '5100'
 
     def test_08_customer_add_shipping_contact(self):

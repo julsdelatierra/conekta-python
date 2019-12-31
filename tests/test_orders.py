@@ -3,6 +3,7 @@
 #(c) 2017 Ramses Carbajal <@RamsesCarbajal>
 
 from . import BaseEndpointTestCase
+from nose.tools import assert_raises
 
 class OrdersEndpointTestCase(BaseEndpointTestCase):
 
@@ -298,3 +299,14 @@ class OrdersEndpointTestCase(BaseEndpointTestCase):
 
         assert charge.status == "paid"
         assert charge.amount == 20000
+
+    def test_20_order_create_fails(self):
+        self.client.api_key = 'key_ZLy4aP2szht1HqzkCezDEA'
+        order_params = self.order_object.copy()
+        del order_params['line_items']
+        with assert_raises(self.client.ConektaError) as ex:
+            self.client.Order.create(order_params)
+
+        assert ex.exception.args[0]['details'][0]['code'] == "conekta.errors.parameter_validation.line_items.missing"
+        assert ex.exception.error_json['details'][0]['code'] == "conekta.errors.parameter_validation.line_items.missing"
+        assert ex.exception.code == "conekta.errors.parameter_validation.line_items.missing"
