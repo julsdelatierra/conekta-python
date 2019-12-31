@@ -1,3 +1,7 @@
+## [2.5.1](https://github.com/conekta/conekta-python/releases/tag/v2.5.1) - 2019-12-31
+### Change
+- Adds message field for error object where it was previously missing
+
 ## [2.4.0](https://github.com/conekta/conekta-python/releases/tag/v2.4.0) - 2017-09-18
 ### Change
 - Change httplib2 library for requests
