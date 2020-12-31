@@ -302,5 +302,125 @@ class BaseEndpointTestCase(unittest.TestCase):
             "country": "CA",
             "postal_code": "T4N 0B8"
         }
+    }
 
+    checkout_object = {
+        "name": "Payment Link Name",
+        "type": "PaymentLink",
+        "recurrent": False,
+        "expired_at": 1590882634,
+        "allowed_payment_methods": ["cash", "card", "bank_transfer"],
+        "needs_shipping_contact": True,
+        "monthly_installments_enabled": False,
+        "monthly_installments_options": [3, 6, 9, 12],
+        "order_template": {
+            "line_items": [{
+                "name": "Red Wine",
+                "unit_price": 1000,
+                "quantity": 10
+            }],
+        "currency": "MXN",
+        "customer_info": {
+              "name": "Juan Perez",
+              "email": "test@conekta.com",
+              "phone": "5566982090"
+        }
+      }
+    }
+
+    checkout_object_multiple = {
+        "name": "Payment Link Name",
+        "type": "PaymentLink",
+        "recurrent": True,
+        "expired_at": 1590882634,
+        "allowed_payment_methods": ["cash", "card", "bank_transfer"],
+        "needs_shipping_contact": True,
+        "monthly_installments_enabled": False,
+        "monthly_installments_options": [3, 6, 9, 12],
+        "order_template": {
+            "line_items": [{
+                "name": "Red Wine",
+                "unit_price": 1000,
+                "quantity": 10
+            }],
+        "currency": "MXN",
+        "customer_info": {
+              "name": "Juan Perez",
+              "email": "test@conekta.com",
+              "phone": "5566982090"
+        }
+      }
+    }
+
+    checkout_object_msi = {
+        "name": "Payment Link Name",
+        "type": "PaymentLink",
+        "recurrent": True,
+        "expired_at": 1590882634,
+        "allowed_payment_methods": ["cash", "card", "bank_transfer"],
+        "needs_shipping_contact": True,
+        "monthly_installments_enabled": True,
+        "monthly_installments_options": [3, 6, 9, 12],
+        "order_template": {
+            "line_items": [{
+                "name": "Red Wine",
+                "unit_price": 1000,
+                "quantity": 10
+            }],
+        "currency": "MXN",
+        "customer_info": {
+              "name": "Juan Perez",
+              "email": "test@conekta.com",
+              "phone": "5566982090"
+        }
+      }
+    }
+
+    checkout_object_type_checkout = {
+        "name": "Payment Link Name",
+        "type": "checkout",
+        "recurrent": True,
+        "expired_at": 1590882634,
+        "allowed_payment_methods": ["cash", "card", "bank_transfer"],
+        "needs_shipping_contact": True,
+        "monthly_installments_enabled": True,
+        "monthly_installments_options": [3, 6, 9, 12],
+        "order_template": {
+            "line_items": [{
+                "name": "Red Wine",
+                "unit_price": 1000,
+                "quantity": 10
+            }],
+        "currency": "MXN",
+        "customer_info": {
+              "name": "Juan Perez",
+              "email": "test@conekta.com",
+              "phone": "5566982090"
+        }
+      }
+    }
+
+        checkout_object_send = {
+        "id": "05b25724-df59-4925-8762-105d627875fd"
+        "name": "Payment Link Name",
+        "type": "checkout",
+        "recurrent": True,
+        "expired_at": 1590882634,
+        "allowed_payment_methods": ["cash", "card", "bank_transfer"],
+        "needs_shipping_contact": True,
+        "monthly_installments_enabled": True,
+        "monthly_installments_options": [3, 6, 9, 12],
+        "order_template": {
+            "line_items": [{
+                "name": "Red Wine",
+                "unit_price": 1000,
+                "quantity": 10
+            }],
+        "currency": "MXN",
+        "customer_info": {
+              "name": "Juan Perez",
+              "email": "test@conekta.com",
+              "phone": "5566982090"
+        }
+      }
     }

@@ -455,6 +455,23 @@ class Customer(_CreatableResource, _UpdatableResource, _DeletableResource, _Find
         else:
             return None
 
+class Checkout(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource):
+
+    def __init__(self, *args, **kwargs):
+        super(Checkouts, self).__init__(*args, **kwargs)
+        
+    def create(self, params, api_key=None):
+        return self.load_via_http_request("%s/checkouts" % self.instance_url(), 'POST', params, api_key=api_key)
+
+    def cancel(self, params, api_key=None):
+        return self.load_via_http_request("%s/checkouts/cancel/%s" % (self.instance_url(), self.id), 'PUT', None, api_key=api_key)
+
+    def sendEmail(self, params, api_key=None):
+        return self.load_via_http_request("%s/checkouts/email" % self.instance_url(), 'POST', params, api_key=api_key)
+
+    def sendSms(self, params, api_key=None):
+        return self.load_via_http_request("%s/checkouts/sms" % self.instance_url(), 'POST', params, api_key=api_key)
+
 class Event(_FindableResource): pass
 
 class Log(_FindableResource): pass
